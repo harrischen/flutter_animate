@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/demo/AnimatedOpacityApp.dart';
+import 'package:myapp/demo/LayoutExample.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(),
-      home: AnimatedOpacityApp(),
+      home: LayoutExampleApp(),
     );
   }
 }
