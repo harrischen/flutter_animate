@@ -51,13 +51,55 @@ class TitleSection extends StatelessWidget {
               ],
             ),
           ),
-          Icon(
-            Icons.star,
-            color: Colors.red[500],
-          ),
-          const Text('41'),
+          FavoriteWidget(),
         ],
       ),
+    );
+  }
+}
+
+class FavoriteWidget extends StatefulWidget {
+  const FavoriteWidget({Key? key}) : super(key: key);
+
+  @override
+  _FavoriteWidgetState createState() => _FavoriteWidgetState();
+}
+
+class _FavoriteWidgetState extends State<FavoriteWidget> {
+  bool _isFavorited = true;
+  int _favoriteCount = 41;
+
+  /// 点击切换选中状态
+  void _toggleFavorite() {
+    setState(() {
+      if (_isFavorited) {
+        _favoriteCount -= 1;
+        _isFavorited = false;
+      } else {
+        _favoriteCount += 1;
+        _isFavorited = true;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          padding: const EdgeInsets.all(0),
+          onPressed: _toggleFavorite,
+          color: _isFavorited ? Colors.red : Colors.green,
+          icon: _isFavorited
+              ? const Icon(Icons.star)
+              : const Icon(Icons.star_border),
+        ),
+        SizedBox(
+          width: 18,
+          child: Text('$_favoriteCount'),
+        )
+      ],
     );
   }
 }
