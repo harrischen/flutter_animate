@@ -1,7 +1,8 @@
 # Flutter Animate
 
-Thanks to the `animate_do` project for giving me development inspiration. 
-Thanks to the `animate.css` project for giving me the visual experience.
+Thanks to the [`animate_do`](https://github.com/Klerith/animate_do_package) project for giving me development inspiration. 
+
+Thanks to the [`animate.css`](https://github.com/animate-css/animate.css) project for giving me the visual experience.
 
 This project is my personal learning project (if successful, it will be integrated into the project of my company).
 
