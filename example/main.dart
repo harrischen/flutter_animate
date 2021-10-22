@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'demo/LayoutExample.dart';
+import 'demo/LogoApp.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(),
-      home: LayoutExampleApp(),
+      home: LogoApp(),
     );
   }
 }
