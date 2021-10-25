@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:motion/src/zooming-entrances/zoom-in.dart';
+import 'package:motion/motion.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,10 +13,12 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('Animate Demo'),
         ),
-        body: ZoomIn(
-          completed: () {
-            print('=========completed=========');
-          },
+        body: Center(
+          child: ZoomIn(
+            completed: () {
+              print('=========completed=========');
+            },
+          ),
         ),
       ),
     );
