@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:motion/motion.dart';
+import 'package:motion/src/zooming-entrances/zoom-in-down.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
           title: Text('Animate Demo'),
         ),
         body: Center(
-          child: ZoomIn(
+          child: ZoomInDown(
             completed: () {
               print('=========completed=========');
             },
