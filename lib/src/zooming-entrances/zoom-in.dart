@@ -20,10 +20,16 @@ class ZoomIn extends StatefulWidget {
     Key? key,
     this.child = const FlutterLogo(),
     this.curve = Curves.linear,
+    this.duration = const Duration(milliseconds: 500),
+    this.delay = const Duration(milliseconds: 0),
+    this.completed,
   }) : super(key: key);
 
   final Widget child;
   final Curve curve;
+  final Duration duration;
+  final Duration delay;
+  final VoidCallback? completed;
 
   @override
   _ZoomInState createState() => _ZoomInState();
@@ -33,21 +39,28 @@ class _ZoomInState extends State<ZoomIn> with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> scale;
   late Animation<double> opacity;
+  late CurvedAnimation curve;
 
   @override
   void initState() {
     super.initState();
 
-    controller = AnimationController(
-        duration: const Duration(milliseconds: 400), vsync: this);
+    controller = AnimationController(duration: widget.duration, vsync: this);
+    curve = CurvedAnimation(parent: controller, curve: widget.curve)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          if (widget.completed != null && widget.completed is Function) {
+            widget.completed!();
+          }
+        }
+      });
 
-    scale = Tween<double>(begin: 0.3, end: 1.0)
-        .animate(CurvedAnimation(parent: controller, curve: widget.curve));
+    scale = Tween<double>(begin: 0.3, end: 1.0).animate(curve);
+    opacity = Tween<double>(begin: 0.0, end: 1.0).animate(curve);
 
-    opacity = Tween<double>(begin: 0.0, end: 1.0)
-        .animate(CurvedAnimation(parent: controller, curve: widget.curve));
-
-    controller.forward();
+    Future.delayed(widget.delay, () {
+      controller.forward();
+    });
   }
 
   @override

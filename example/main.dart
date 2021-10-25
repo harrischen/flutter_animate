@@ -13,7 +13,11 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('Animate Demo'),
         ),
-        body: ZoomIn(),
+        body: ZoomIn(
+          completed: () {
+            print('=========completed=========');
+          },
+        ),
       ),
     );
   }
