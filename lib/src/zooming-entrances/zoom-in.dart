@@ -67,6 +67,7 @@ class _ZoomInState extends State<ZoomIn> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return GrowTransition(
       child: widget.child,
+      controller: controller,
       scale: scale,
       opacity: opacity,
     );
@@ -83,12 +84,13 @@ class GrowTransition extends StatelessWidget {
   const GrowTransition({
     Key? key,
     required this.child,
+    required this.controller,
     required this.scale,
     required this.opacity,
   }) : super(key: key);
 
   final Widget child;
-
+  final AnimationController controller;
   final Animation<double> scale;
   final Animation<double> opacity;
 
