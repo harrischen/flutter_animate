@@ -22,15 +22,13 @@ import 'package:flutter/material.dart';
 class ZoomInDown extends StatefulWidget {
   const ZoomInDown({
     Key? key,
-    this.child = const FlutterLogo(),
-    this.curve = Curves.linear,
-    this.duration = const Duration(milliseconds: 5000),
+    this.child = const FlutterLogo(size: 60),
+    this.duration = const Duration(milliseconds: 1000),
     this.delay = const Duration(milliseconds: 0),
     this.completed,
   }) : super(key: key);
 
   final Widget child;
-  final Curve curve;
   final Duration duration;
   final Duration delay;
   final VoidCallback? completed;
@@ -39,31 +37,60 @@ class ZoomInDown extends StatefulWidget {
   _ZoomInDownState createState() => _ZoomInDownState();
 }
 
-class _ZoomInDownState extends State<ZoomInDown>
-    with SingleTickerProviderStateMixin {
+class _ZoomInDownState extends State<ZoomInDown> with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> scale;
   late Animation<double> opacity;
   late Animation<double> offset;
-  late CurvedAnimation curve;
 
   @override
   void initState() {
     super.initState();
-
     controller = AnimationController(duration: widget.duration, vsync: this);
-    curve = CurvedAnimation(parent: controller, curve: widget.curve)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          if (widget.completed != null && widget.completed is Function) {
-            widget.completed!();
-          }
-        }
-      });
+    opacity = TweenSequence<double>(<TweenSequenceItem<double>>[
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 0.0, end: 1.0).chain(CurveTween(
+          curve: Cubic(0.55, 0.055, 0.675, 0.19),
+        )),
+        weight: 60,
+      ),
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 1.0, end: 1.0).chain(CurveTween(
+          curve: Cubic(0.175, 0.885, 0.32, 1),
+        )),
+        weight: 40,
+      ),
+    ]).animate(controller);
 
-    scale = Tween<double>(begin: 0.1, end: 1.0).animate(curve);
-    opacity = Tween<double>(begin: 0.0, end: 1.0).animate(curve);
-    offset = Tween<double>(begin: -100, end: 0.0).animate(curve);
+    scale = TweenSequence<double>(<TweenSequenceItem<double>>[
+      TweenSequenceItem<double>(
+        tween: Tween<double>(begin: 0.1, end: 0.475).chain(CurveTween(
+          curve: Cubic(0.55, 0.055, 0.675, 0.19),
+        )),
+        weight: 60,
+      ),
+      TweenSequenceItem<double>(
+        tween: Tween<double>(begin: 0.475, end: 1.0).chain(CurveTween(
+          curve: Cubic(0.175, 0.885, 0.32, 1),
+        )),
+        weight: 40,
+      ),
+    ]).animate(controller);
+
+    offset = TweenSequence<double>(<TweenSequenceItem<double>>[
+      TweenSequenceItem<double>(
+        tween: Tween<double>(begin: -500, end: 30).chain(CurveTween(
+          curve: Cubic(0.55, 0.055, 0.675, 0.19),
+        )),
+        weight: 60,
+      ),
+      TweenSequenceItem<double>(
+        tween: Tween<double>(begin: 30, end: 0).chain(CurveTween(
+          curve: Cubic(0.175, 0.885, 0.32, 1),
+        )),
+        weight: 40,
+      ),
+    ]).animate(controller);
 
     Future.delayed(widget.delay, () {
       controller.forward();
