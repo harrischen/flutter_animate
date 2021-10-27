@@ -22,7 +22,14 @@ import 'package:flutter/material.dart';
 class ZoomInDown extends StatefulWidget {
   const ZoomInDown({
     Key? key,
-    this.child = const FlutterLogo(size: 60),
+    this.child = const Text(
+      'ZoomInDown',
+      style: TextStyle(
+        fontSize: 40,
+        fontWeight: FontWeight.bold,
+        color: Colors.lightBlue,
+      ),
+    ),
     this.duration = const Duration(milliseconds: 1000),
     this.delay = const Duration(milliseconds: 0),
     this.completed,
@@ -79,13 +86,13 @@ class _ZoomInDownState extends State<ZoomInDown> with SingleTickerProviderStateM
 
     offset = TweenSequence<double>(<TweenSequenceItem<double>>[
       TweenSequenceItem<double>(
-        tween: Tween<double>(begin: -500, end: 30).chain(CurveTween(
+        tween: Tween<double>(begin: -1000, end: 60).chain(CurveTween(
           curve: Cubic(0.55, 0.055, 0.675, 0.19),
         )),
         weight: 60,
       ),
       TweenSequenceItem<double>(
-        tween: Tween<double>(begin: 30, end: 0).chain(CurveTween(
+        tween: Tween<double>(begin: 60, end: 0).chain(CurveTween(
           curve: Cubic(0.175, 0.885, 0.32, 1),
         )),
         weight: 40,

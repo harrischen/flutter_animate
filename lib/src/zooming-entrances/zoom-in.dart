@@ -18,7 +18,14 @@ import 'package:flutter/material.dart';
 class ZoomIn extends StatefulWidget {
   const ZoomIn({
     Key? key,
-    this.child = const FlutterLogo(size: 60),
+    this.child = const Text(
+      'ZoomIn',
+      style: TextStyle(
+        fontSize: 40,
+        fontWeight: FontWeight.bold,
+        color: Colors.lightBlue,
+      ),
+    ),
     this.curve = Curves.linear,
     this.duration = const Duration(milliseconds: 500),
     this.delay = const Duration(milliseconds: 0),
