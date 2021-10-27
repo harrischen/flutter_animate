@@ -48,10 +48,8 @@ class _ZoomInState extends State<ZoomIn> with SingleTickerProviderStateMixin {
     controller = AnimationController(duration: widget.duration, vsync: this);
     curve = CurvedAnimation(parent: controller, curve: widget.curve)
       ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          if (widget.completed != null && widget.completed is Function) {
-            widget.completed!();
-          }
+        if (status == AnimationStatus.completed && widget.completed is Function) {
+          widget.completed!();
         }
       });
 

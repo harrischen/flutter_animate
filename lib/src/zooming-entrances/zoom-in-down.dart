@@ -90,7 +90,12 @@ class _ZoomInDownState extends State<ZoomInDown> with SingleTickerProviderStateM
         )),
         weight: 40,
       ),
-    ]).animate(controller);
+    ]).animate(controller)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed && widget.completed is Function) {
+          widget.completed!();
+        }
+      });
 
     Future.delayed(widget.delay, () {
       controller.forward();
