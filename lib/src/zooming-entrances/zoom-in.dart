@@ -52,13 +52,13 @@ class _ZoomInState extends State<ZoomIn> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    controller = AnimationController(duration: widget.duration, vsync: this);
-    curve = CurvedAnimation(parent: controller, curve: widget.curve)
+    controller = AnimationController(duration: widget.duration, vsync: this)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed && widget.completed is Function) {
           widget.completed!();
         }
       });
+    curve = CurvedAnimation(parent: controller, curve: widget.curve);
 
     scale = Tween<double>(begin: 0.3, end: 1.0).animate(curve);
     opacity = Tween<double>(begin: 0.0, end: 1.0).animate(curve);
@@ -70,7 +70,7 @@ class _ZoomInState extends State<ZoomIn> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return GrowTransition(
+    return ZoomInGrowTransition(
       child: widget.child,
       controller: controller,
       scale: scale,
@@ -85,8 +85,8 @@ class _ZoomInState extends State<ZoomIn> with SingleTickerProviderStateMixin {
   }
 }
 
-class GrowTransition extends StatelessWidget {
-  const GrowTransition({
+class ZoomInGrowTransition extends StatelessWidget {
+  const ZoomInGrowTransition({
     Key? key,
     required this.child,
     required this.controller,

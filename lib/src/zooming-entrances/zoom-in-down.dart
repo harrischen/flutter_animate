@@ -53,7 +53,12 @@ class _ZoomInDownState extends State<ZoomInDown> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(duration: widget.duration, vsync: this);
+    controller = AnimationController(duration: widget.duration, vsync: this)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed && widget.completed is Function) {
+          widget.completed!();
+        }
+      });
     opacity = TweenSequence<double>(<TweenSequenceItem<double>>[
       TweenSequenceItem(
         tween: Tween<double>(begin: 0.0, end: 1.0).chain(CurveTween(
@@ -97,12 +102,7 @@ class _ZoomInDownState extends State<ZoomInDown> with SingleTickerProviderStateM
         )),
         weight: 40,
       ),
-    ]).animate(controller)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed && widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    ]).animate(controller);
 
     Future.delayed(widget.delay, () {
       controller.forward();
