@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vector_math/vector_math_64.dart' as v;
 
 /// How to achieve zoomIn in animate.css
 /// @keyframes zoomOutDown {
@@ -26,7 +27,7 @@ class ZoomOutDown extends StatefulWidget {
         color: Colors.lightBlue,
       ),
     ),
-    this.duration = const Duration(milliseconds: 1000),
+    this.duration = const Duration(milliseconds: 5000),
     this.delay = const Duration(milliseconds: 0),
     this.completed,
   }) : super(key: key);
@@ -40,7 +41,8 @@ class ZoomOutDown extends StatefulWidget {
   _ZoomOutDownState createState() => _ZoomOutDownState();
 }
 
-class _ZoomOutDownState extends State<ZoomOutDown> with SingleTickerProviderStateMixin {
+class _ZoomOutDownState extends State<ZoomOutDown>
+    with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> scale;
   late Animation<double> opacity;
@@ -51,13 +53,14 @@ class _ZoomOutDownState extends State<ZoomOutDown> with SingleTickerProviderStat
     super.initState();
     controller = AnimationController(duration: widget.duration, vsync: this)
       ..addStatusListener((status) {
-        if (status == AnimationStatus.completed && widget.completed is Function) {
+        if (status == AnimationStatus.completed &&
+            widget.completed is Function) {
           widget.completed!();
         }
       });
     opacity = TweenSequence<double>(<TweenSequenceItem<double>>[
       TweenSequenceItem(
-        tween: Tween<double>(begin: 1.0, end: 1.0).chain(CurveTween(
+        tween: ConstantTween<double>(1.0).chain(CurveTween(
           curve: Cubic(0.55, 0.055, 0.675, 0.19),
         )),
         weight: 40,
@@ -93,7 +96,7 @@ class _ZoomOutDownState extends State<ZoomOutDown> with SingleTickerProviderStat
         weight: 40,
       ),
       TweenSequenceItem<double>(
-        tween: Tween<double>(begin: -60, end: 1000).chain(CurveTween(
+        tween: Tween<double>(begin: -60, end: 2000).chain(CurveTween(
           curve: Cubic(0.175, 0.885, 0.32, 1),
         )),
         weight: 60,
@@ -143,23 +146,30 @@ class ZoomOutDownGrowTransition extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: controller,
+      // builder: (context, child) {
+      //   return Opacity(
+      //     opacity: opacity.value,
+      //     child: Transform(
+      //       alignment: Alignment.bottomCenter,
+      //       transform: Matrix4.compose(
+      //         v.Vector3(0, offset.value, 0),
+      //         v.Quaternion(0, 0, 0, 0),
+      //         v.Vector3(scale.value, scale.value, 1),
+      //       ),
+      //       child: child,
+      //     ),
+      //   );
+      // },
       builder: (context, child) {
-        // return Transform.scale(
-        //   scale: scale.value,
-        //   child: Transform.translate(
-        //     offset: Offset(0, offset.value),
-        //     child: Opacity(
-        //       opacity: opacity.value,
-        //       child: child,
-        //     ),
-        //   ),
-        // );
-        return Opacity(
-          opacity: opacity.value,
-          child: Transform(
-            alignment: Alignment.bottomCenter,
-            transform: Matrix4.diagonal3Values(scale.value, scale.value, scale.value),
-            child: child,
+        return Transform.scale(
+          alignment: Alignment.bottomCenter,
+          scale: scale.value,
+          child: Transform.translate(
+            offset: Offset(0, offset.value),
+            child: Opacity(
+              opacity: opacity.value,
+              child: child,
+            ),
           ),
         );
       },
