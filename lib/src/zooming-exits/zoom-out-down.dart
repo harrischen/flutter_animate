@@ -27,7 +27,7 @@ class ZoomOutDown extends StatefulWidget {
         color: Colors.lightBlue,
       ),
     ),
-    this.duration = const Duration(milliseconds: 5000),
+    this.duration = const Duration(milliseconds: 10000),
     this.delay = const Duration(milliseconds: 0),
     this.completed,
   }) : super(key: key);
@@ -41,8 +41,7 @@ class ZoomOutDown extends StatefulWidget {
   _ZoomOutDownState createState() => _ZoomOutDownState();
 }
 
-class _ZoomOutDownState extends State<ZoomOutDown>
-    with SingleTickerProviderStateMixin {
+class _ZoomOutDownState extends State<ZoomOutDown> with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> scale;
   late Animation<double> opacity;
@@ -53,55 +52,69 @@ class _ZoomOutDownState extends State<ZoomOutDown>
     super.initState();
     controller = AnimationController(duration: widget.duration, vsync: this)
       ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
+        if (status == AnimationStatus.completed && widget.completed is Function) {
           widget.completed!();
         }
       });
-    opacity = TweenSequence<double>(<TweenSequenceItem<double>>[
-      TweenSequenceItem(
-        tween: ConstantTween<double>(1.0).chain(CurveTween(
-          curve: Cubic(0.55, 0.055, 0.675, 0.19),
-        )),
-        weight: 40,
-      ),
-      TweenSequenceItem(
-        tween: Tween<double>(begin: 1.0, end: 0.0).chain(CurveTween(
-          curve: Cubic(0.175, 0.885, 0.32, 1),
-        )),
-        weight: 60,
-      ),
-    ]).animate(controller);
 
-    scale = TweenSequence<double>(<TweenSequenceItem<double>>[
-      TweenSequenceItem<double>(
-        tween: Tween<double>(begin: 1.0, end: 0.475).chain(CurveTween(
+    opacity = Tween<double>(begin: 1.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Interval(
+          0.0,
+          0.4,
           curve: Cubic(0.55, 0.055, 0.675, 0.19),
-        )),
-        weight: 40,
+        ),
       ),
-      TweenSequenceItem<double>(
-        tween: Tween<double>(begin: 0.475, end: 0.1).chain(CurveTween(
-          curve: Cubic(0.175, 0.885, 0.32, 1),
-        )),
-        weight: 60,
-      ),
-    ]).animate(controller);
+    );
 
-    offset = TweenSequence<double>(<TweenSequenceItem<double>>[
-      TweenSequenceItem<double>(
-        tween: Tween<double>(begin: 0, end: -60).chain(CurveTween(
+    scale = Tween<double>(begin: 1.0, end: 0.475).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Interval(
+          0.0,
+          0.4,
           curve: Cubic(0.55, 0.055, 0.675, 0.19),
-        )),
-        weight: 40,
+        ),
       ),
-      TweenSequenceItem<double>(
-        tween: Tween<double>(begin: -60, end: 2000).chain(CurveTween(
-          curve: Cubic(0.175, 0.885, 0.32, 1),
-        )),
-        weight: 60,
+    )..isCompleted;
+
+    offset = Tween<double>(begin: 0.0, end: -60.0).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Interval(
+          0.0,
+          0.4,
+          curve: Cubic(0.55, 0.055, 0.675, 0.19),
+        ),
       ),
-    ]).animate(controller);
+    );
+    // opacity = TweenSequence<double>(<TweenSequenceItem<double>>[
+    //   TweenSequenceItem(
+    //     tween: ConstantTween<double>(1.0).chain(CurveTween(
+    //       curve: Cubic(0.55, 0.055, 0.675, 0.19),
+    //     )),
+    //     weight: 40,
+    //   ),
+    // ]).animate(controller);
+
+    // scale = TweenSequence<double>(<TweenSequenceItem<double>>[
+    //   TweenSequenceItem<double>(
+    //     tween: Tween<double>(begin: 1.0, end: 0.475).chain(CurveTween(
+    //       curve: Cubic(0.55, 0.055, 0.675, 0.19),
+    //     )),
+    //     weight: 40,
+    //   ),
+    // ]).animate(controller);
+
+    // offset = TweenSequence<double>(<TweenSequenceItem<double>>[
+    //   TweenSequenceItem<double>(
+    //     tween: Tween<double>(begin: 0, end: -60).chain(CurveTween(
+    //       curve: Cubic(0.55, 0.055, 0.675, 0.19),
+    //     )),
+    //     weight: 40,
+    //   ),
+    // ]).animate(controller);
 
     Future.delayed(widget.delay, () {
       controller.forward();
@@ -146,26 +159,12 @@ class ZoomOutDownGrowTransition extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: controller,
-      // builder: (context, child) {
-      //   return Opacity(
-      //     opacity: opacity.value,
-      //     child: Transform(
-      //       alignment: Alignment.bottomCenter,
-      //       transform: Matrix4.compose(
-      //         v.Vector3(0, offset.value, 0),
-      //         v.Quaternion(0, 0, 0, 0),
-      //         v.Vector3(scale.value, scale.value, 1),
-      //       ),
-      //       child: child,
-      //     ),
-      //   );
-      // },
       builder: (context, child) {
-        return Transform.scale(
-          alignment: Alignment.bottomCenter,
-          scale: scale.value,
-          child: Transform.translate(
-            offset: Offset(0, offset.value),
+        return Transform.translate(
+          offset: Offset(0.0, offset.value),
+          child: Transform.scale(
+            alignment: Alignment.bottomCenter,
+            scale: scale.value,
             child: Opacity(
               opacity: opacity.value,
               child: child,
