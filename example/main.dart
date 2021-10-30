@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
           title: Text('Animate Demo'),
         ),
         body: Center(
-          child: ZoomOutDown(
+          child: ZoomOutRight(
             completed: () {
               print('=========completed=========');
             },

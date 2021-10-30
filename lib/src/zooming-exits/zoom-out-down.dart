@@ -81,7 +81,7 @@ class _ZoomOutDownState extends State<ZoomOutDown>
         weight: 40.0,
       ),
       TweenSequenceItem<double>(
-        tween: Tween<double>(begin: 0.475, end: 0.0).chain(CurveTween(
+        tween: Tween<double>(begin: 0.475, end: 0.1).chain(CurveTween(
           curve: Cubic(0.175, 0.885, 0.32, 1),
         )),
         weight: 60.0,
