@@ -42,15 +42,17 @@ class _PulseState extends State<Pulse> with SingleTickerProviderStateMixin {
 
     scale = TweenSequence([
       TweenSequenceItem(
-          tween: Tween(begin: 1.0, end: 1.05).chain(
-            CurveTween(curve: Curves.easeInOut),
-          ),
-          weight: 0.5),
+        tween: Tween(begin: 1.0, end: 1.05).chain(
+          CurveTween(curve: Curves.easeInOut),
+        ),
+        weight: 0.5,
+      ),
       TweenSequenceItem(
-          tween: Tween(begin: 1.05, end: 1.0).chain(
-            CurveTween(curve: Curves.easeInOut),
-          ),
-          weight: 0.5),
+        tween: Tween(begin: 1.05, end: 1.0).chain(
+          CurveTween(curve: Curves.easeInOut),
+        ),
+        weight: 0.5,
+      ),
     ]).animate(controller);
 
     Future.delayed(widget.delay, () {
@@ -66,7 +68,7 @@ class _PulseState extends State<Pulse> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return PulseGrowTransition(
+    return _GrowTransition(
       child: widget.child,
       controller: controller,
       scale: scale,
@@ -74,8 +76,8 @@ class _PulseState extends State<Pulse> with SingleTickerProviderStateMixin {
   }
 }
 
-class PulseGrowTransition extends StatelessWidget {
-  const PulseGrowTransition({
+class _GrowTransition extends StatelessWidget {
+  const _GrowTransition({
     Key? key,
     required this.controller,
     required this.child,
