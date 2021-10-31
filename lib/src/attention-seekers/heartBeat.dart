@@ -11,14 +11,16 @@ class HeartBeat extends StatefulWidget {
         color: Colors.lightBlue,
       ),
     ),
-    this.duration = const Duration(milliseconds: 1000),
+    this.duration = const Duration(milliseconds: 1300),
     this.delay = const Duration(milliseconds: 0),
+    this.curve = Curves.easeInOut,
     this.completed,
   }) : super(key: key);
 
   final Widget child;
   final Duration duration;
   final Duration delay;
+  final Curve curve;
   final VoidCallback? completed;
 
   @override
@@ -44,27 +46,33 @@ class _HeartBeatState extends State<HeartBeat>
     scale = TweenSequence<double>([
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: 1.0, end: 1.3).chain(
-          CurveTween(curve: Curves.easeInOut),
+          CurveTween(curve: widget.curve),
         ),
-        weight: 0.14,
+        weight: 14.0,
       ),
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: 1.3, end: 1.0).chain(
-          CurveTween(curve: Curves.easeInOut),
+          CurveTween(curve: widget.curve),
         ),
-        weight: 0.14,
+        weight: 14.0,
       ),
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: 1.0, end: 1.3).chain(
-          CurveTween(curve: Curves.easeInOut),
+          CurveTween(curve: widget.curve),
         ),
-        weight: 0.14,
+        weight: 14.0,
       ),
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: 1.3, end: 1.0).chain(
-          CurveTween(curve: Curves.easeInOut),
+          CurveTween(curve: widget.curve),
         ),
-        weight: 0.28,
+        weight: 28.0,
+      ),
+      TweenSequenceItem<double>(
+        tween: Tween<double>(begin: 1.0, end: 1.0).chain(
+          CurveTween(curve: widget.curve),
+        ),
+        weight: 30.0,
       ),
     ]).animate(controller);
 
