@@ -2,6 +2,7 @@ library motion;
 
 export 'package:motion/src/attention-seekers/flash.dart';
 export 'package:motion/src/attention-seekers/pulse.dart';
+export 'package:motion/src/attention-seekers/heartBeat.dart';
 export 'package:motion/src/zooming-entrances/zoom-in.dart';
 export 'package:motion/src/zooming-entrances/zoom-in-down.dart';
 export 'package:motion/src/zooming-entrances/zoom-in-up.dart';
