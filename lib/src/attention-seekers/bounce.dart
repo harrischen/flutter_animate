@@ -35,8 +35,7 @@ class _BounceState extends State<Bounce> with SingleTickerProviderStateMixin {
     super.initState();
     controller = AnimationController(vsync: this, duration: widget.duration)
       ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
+        if (status == AnimationStatus.completed && widget.completed is Function) {
           widget.completed!();
         }
       });
@@ -44,19 +43,19 @@ class _BounceState extends State<Bounce> with SingleTickerProviderStateMixin {
     translateY = TweenSequence<double>([
       TweenSequenceItem(
         tween: Tween(begin: 0.0, end: 0.0).chain(
-          CurveTween(curve: Curves.ease),
+          CurveTween(curve: Cubic(0.215, 0.61, 0.355, 1)),
         ),
         weight: 20.0,
       ),
       TweenSequenceItem(
         tween: Tween(begin: 0.0, end: -30.0).chain(
-          CurveTween(curve: Curves.easeOut),
+          CurveTween(curve: Cubic(0.755, 0.05, 0.855, 0.06)),
         ),
         weight: 20.0,
       ),
       TweenSequenceItem(
         tween: Tween(begin: -30.0, end: -30.0).chain(
-          CurveTween(curve: Curves.easeOut),
+          CurveTween(curve: Cubic(0.755, 0.05, 0.855, 0.06)),
         ),
         weight: 3.0,
       ),
