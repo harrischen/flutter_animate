@@ -15,7 +15,7 @@ This project is my personal learning project (if successful, it will be integrat
 * [x] bounce
 * [x] flash
 * [x] pulse
-* [ ] rubberBand
+* [x] rubberBand
 * [x] shakeX
 * [x] shakeY
 * [x] headShake
