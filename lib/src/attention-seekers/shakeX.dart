@@ -96,7 +96,6 @@ class _GrowTransition extends StatelessWidget {
       animation: controller,
       builder: (context, child) {
         return Transform(
-          alignment: Alignment.bottomCenter,
           transform: Matrix4.translationValues(translateX.value, 0.0, 0.0),
           child: child,
         );

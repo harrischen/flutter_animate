@@ -108,7 +108,6 @@ class _GrowTransition extends StatelessWidget {
         final _rotate = Matrix4.rotationZ(rotateY.value * pi / 360);
         final _offset = Matrix4.translationValues(translateX.value, 0.0, 0.0);
         return Transform(
-          alignment: Alignment.bottomCenter,
           transform: _offset..add(_rotate),
           child: child,
         );
