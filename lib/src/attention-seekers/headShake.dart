@@ -105,7 +105,7 @@ class _GrowTransition extends StatelessWidget {
     return AnimatedBuilder(
       animation: controller,
       builder: (context, child) {
-        final _rotate = Matrix4.rotationZ(rotateY.value * pi / 360);
+        final _rotate = Matrix4.rotationZ(rotateY.value * pi / 180);
         final _offset = Matrix4.translationValues(translateX.value, 0.0, 0.0);
         return Transform(
           transform: _offset..add(_rotate),
