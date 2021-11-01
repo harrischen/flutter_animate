@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
           title: Text('Animate Demo'),
         ),
         body: Center(
-          child: RubberBand(
+          child: Swing(
             completed: () {
               print('=========completed=========');
             },
