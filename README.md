@@ -12,18 +12,18 @@ This project is my personal learning project (if successful, it will be integrat
 ## In development
 
 ### Attention seekers
-* [ ] bounce
-* [ ] flash
-* [ ] pulse
+* [x] bounce
+* [x] flash
+* [x] pulse
 * [ ] rubberBand
 * [ ] shakeX
 * [ ] shakeY
-* [ ] headShake
+* [x] headShake
 * [ ] swing
 * [ ] tada
 * [ ] wobble
 * [ ] jello
-* [ ] heartBeat
+* [x] heartBeat
 
 ### Back entrances
 * [ ] backInDown
@@ -115,18 +115,18 @@ This project is my personal learning project (if successful, it will be integrat
 * [ ] rollOut
 
 ### Zooming entrances
-* [ ] zoomIn
-* [ ] zoomInDown
-* [ ] zoomInLeft
-* [ ] zoomInRight
-* [ ] zoomInUp
+* [x] zoomIn
+* [x] zoomInDown
+* [x] zoomInLeft
+* [x] zoomInRight
+* [x] zoomInUp
 
 ### Zooming exits
-* [ ] zoomOut
-* [ ] zoomOutDown
-* [ ] zoomOutLeft
-* [ ] zoomOutRight
-* [ ] zoomOutUp
+* [x] zoomOut
+* [x] zoomOutDown
+* [x] zoomOutLeft
+* [x] zoomOutRight
+* [x] zoomOutUp
 
 ### Sliding entrances
 * [ ] slideInDown
