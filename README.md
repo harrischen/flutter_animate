@@ -19,8 +19,8 @@ This project is my personal learning project (if successful, it will be integrat
 * [x] shakeX
 * [x] shakeY
 * [x] headShake
-* [ ] swing
-* [ ] tada
+* [x] swing
+* [x] tada
 * [ ] wobble
 * [ ] jello
 * [x] heartBeat
