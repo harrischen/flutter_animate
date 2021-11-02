@@ -31,6 +31,7 @@ class _SlideInRightState extends State<SlideInRight>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> offset;
+  bool visible = false;
 
   @override
   void initState() {
@@ -49,8 +50,17 @@ class _SlideInRightState extends State<SlideInRight>
     ));
 
     Future.delayed(widget.delay, () {
+      setState(() {
+        visible = true;
+      });
       controller.forward();
     });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -59,13 +69,8 @@ class _SlideInRightState extends State<SlideInRight>
       child: widget.child,
       controller: controller,
       offset: offset,
+      visible: visible,
     );
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
   }
 }
 
@@ -75,20 +80,25 @@ class _GrowTransition extends StatelessWidget {
     required this.controller,
     required this.child,
     required this.offset,
+    required this.visible,
   }) : super(key: key);
 
   final Widget child;
   final AnimationController controller;
   final Animation<double> offset;
+  final bool visible;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: controller,
       builder: (context, child) {
-        return FractionalTranslation(
-          translation: Offset(offset.value, 0.0),
-          child: child,
+        return Visibility(
+          visible: visible,
+          child: FractionalTranslation(
+            translation: Offset(offset.value, 0.0),
+            child: child,
+          ),
         );
       },
       child: child,
