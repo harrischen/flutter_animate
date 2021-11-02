@@ -21,6 +21,14 @@ export 'package:motion/src/zooming-exits/zoom-out-down.dart';
 export 'package:motion/src/zooming-exits/zoom-out-up.dart';
 export 'package:motion/src/zooming-exits/zoom-out-left.dart';
 export 'package:motion/src/zooming-exits/zoom-out-right.dart';
+export 'package:motion/src/sliding_entrances/slideInDown.dart';
+export 'package:motion/src/sliding_entrances/slideInLeft.dart';
+export 'package:motion/src/sliding_entrances/slideInRight.dart';
+export 'package:motion/src/sliding_entrances/slideInUp.dart';
+export 'package:motion/src/sliding_exits/slideOutDown.dart';
+export 'package:motion/src/sliding_exits/slideOutLeft.dart';
+export 'package:motion/src/sliding_exits/slideOutRight.dart';
+export 'package:motion/src/sliding_exits/slideOutUp.dart';
 
 ///  Author: harrischen
 ///  Version: 0.0.1
