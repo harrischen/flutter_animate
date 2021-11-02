@@ -7,7 +7,7 @@ Thanks to the [`animate.css`](https://github.com/animate-css/animate.css) projec
 This project is my personal learning project (if successful, it will be integrated into the project of my company).
 
 1. Learn the basic layout effects of Flutter;
-2. Learn the Flutter Animate effect and create the corresponding animation component; library
+2. Learn the Flutter Animate effect and create the corresponding animation component library;
 
 ## In development
 
