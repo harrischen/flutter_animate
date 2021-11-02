@@ -135,7 +135,7 @@ This project is my personal learning project (if successful, it will be integrat
 * [x] slideInUp
 
 ### Sliding exits
-* [ ] slideOutDown
-* [ ] slideOutLeft
-* [ ] slideOutRight
-* [ ] slideOutUp
+* [x] slideOutDown
+* [x] slideOutLeft
+* [x] slideOutRight
+* [x] slideOutUp
