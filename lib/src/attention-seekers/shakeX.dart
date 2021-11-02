@@ -12,7 +12,7 @@ class ShakeX extends StatefulWidget {
       ),
     ),
     this.duration = const Duration(milliseconds: 1000),
-    this.delay = const Duration(milliseconds: 0),
+    this.delay = const Duration(milliseconds: 1000),
     this.curve = Curves.ease,
     this.completed,
   }) : super(key: key);
@@ -36,22 +36,33 @@ class _ShakeXState extends State<ShakeX> with SingleTickerProviderStateMixin {
     super.initState();
     controller = AnimationController(vsync: this, duration: widget.duration)
       ..addStatusListener((status) {
-        if (status == AnimationStatus.completed && widget.completed is Function) {
+        if (status == AnimationStatus.completed &&
+            widget.completed is Function) {
           widget.completed!();
         }
       });
 
     translateX = TweenSequence<double>([
-      TweenSequenceItem<double>(tween: Tween(begin: 0.0, end: -10.0), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: -10.0, end: 10.0), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 10.0, end: -10.0), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: -10.0, end: 10.0), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 10.0, end: -10.0), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: -10.0, end: 10.0), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 10.0, end: -10.0), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: -10.0, end: 10.0), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 10.0, end: -10.0), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: -10.0, end: 0.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 0.0, end: -10.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: -10.0, end: 10.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 10.0, end: -10.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: -10.0, end: 10.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 10.0, end: -10.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: -10.0, end: 10.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 10.0, end: -10.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: -10.0, end: 10.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 10.0, end: -10.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: -10.0, end: 0.0), weight: 10.0),
     ]).animate(CurvedAnimation(
       parent: controller,
       curve: widget.curve,

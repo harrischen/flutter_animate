@@ -13,7 +13,7 @@ class Swing extends StatefulWidget {
       ),
     ),
     this.duration = const Duration(milliseconds: 1700),
-    this.delay = const Duration(milliseconds: 0),
+    this.delay = const Duration(milliseconds: 1000),
     this.curve = Curves.ease,
     this.completed,
   }) : super(key: key);
@@ -37,17 +37,23 @@ class _ShakeXState extends State<Swing> with SingleTickerProviderStateMixin {
     super.initState();
     controller = AnimationController(vsync: this, duration: widget.duration)
       ..addStatusListener((status) {
-        if (status == AnimationStatus.completed && widget.completed is Function) {
+        if (status == AnimationStatus.completed &&
+            widget.completed is Function) {
           widget.completed!();
         }
       });
 
     rotateZ = TweenSequence<double>([
-      TweenSequenceItem<double>(tween: Tween(begin: 0.0, end: 15.0), weight: 20.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 15.0, end: -10.0), weight: 20.0),
-      TweenSequenceItem<double>(tween: Tween(begin: -10.0, end: 5.0), weight: 20.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 5.0, end: -5.0), weight: 20.0),
-      TweenSequenceItem<double>(tween: Tween(begin: -5.0, end: 0.0), weight: 20.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 0.0, end: 15.0), weight: 20.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 15.0, end: -10.0), weight: 20.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: -10.0, end: 5.0), weight: 20.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 5.0, end: -5.0), weight: 20.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: -5.0, end: 0.0), weight: 20.0),
     ]).animate(CurvedAnimation(
       parent: controller,
       curve: widget.curve,

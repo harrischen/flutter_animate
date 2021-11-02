@@ -13,7 +13,7 @@ class Tada extends StatefulWidget {
       ),
     ),
     this.duration = const Duration(milliseconds: 1000),
-    this.delay = const Duration(milliseconds: 0),
+    this.delay = const Duration(milliseconds: 1000),
     this.curve = Curves.ease,
     this.completed,
   }) : super(key: key);
@@ -38,33 +38,46 @@ class _ShakeXState extends State<Tada> with SingleTickerProviderStateMixin {
     super.initState();
     controller = AnimationController(vsync: this, duration: widget.duration)
       ..addStatusListener((status) {
-        if (status == AnimationStatus.completed && widget.completed is Function) {
+        if (status == AnimationStatus.completed &&
+            widget.completed is Function) {
           widget.completed!();
         }
       });
 
     rotateZ = TweenSequence<double>([
-      TweenSequenceItem<double>(tween: Tween(begin: 0.0, end: -3.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 0.0, end: -3.0), weight: 10.0),
       TweenSequenceItem<double>(tween: ConstantTween(-3.0), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: -3.0, end: 3.0), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 3.0, end: -3.0), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: -3.0, end: 3.0), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 3.0, end: -3.0), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: -3.0, end: 3.0), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 3.0, end: -3.0), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: -3.0, end: 3.0), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 3.0, end: 0.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: -3.0, end: 3.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 3.0, end: -3.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: -3.0, end: 3.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 3.0, end: -3.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: -3.0, end: 3.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 3.0, end: -3.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: -3.0, end: 3.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 3.0, end: 0.0), weight: 10.0),
     ]).animate(CurvedAnimation(
       parent: controller,
       curve: widget.curve,
     ));
 
     scale = TweenSequence<double>([
-      TweenSequenceItem<double>(tween: Tween(begin: 1.0, end: 0.9), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 1.0, end: 0.9), weight: 10.0),
       TweenSequenceItem<double>(tween: ConstantTween(0.9), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 0.9, end: 1.1), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 0.9, end: 1.1), weight: 10.0),
       TweenSequenceItem<double>(tween: ConstantTween(1.1), weight: 60.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 1.1, end: 1.0), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 1.1, end: 1.0), weight: 10.0),
     ]).animate(CurvedAnimation(
       parent: controller,
       curve: widget.curve,
@@ -112,7 +125,8 @@ class _GrowTransition extends StatelessWidget {
       animation: controller,
       builder: (context, child) {
         final _rotate = Matrix4.rotationZ(rotateZ.value * pi / 180);
-        final _scale = Matrix4.diagonal3Values(scale.value, scale.value, scale.value);
+        final _scale =
+            Matrix4.diagonal3Values(scale.value, scale.value, scale.value);
         return Transform(
           alignment: Alignment.center,
           transform: _rotate..add(_scale),

@@ -12,7 +12,7 @@ class RubberBand extends StatefulWidget {
       ),
     ),
     this.duration = const Duration(milliseconds: 1700),
-    this.delay = const Duration(milliseconds: 0),
+    this.delay = const Duration(milliseconds: 1000),
     this.curve = Curves.ease,
     this.completed,
   }) : super(key: key);
@@ -27,7 +27,8 @@ class RubberBand extends StatefulWidget {
   _ShakeXState createState() => _ShakeXState();
 }
 
-class _ShakeXState extends State<RubberBand> with SingleTickerProviderStateMixin {
+class _ShakeXState extends State<RubberBand>
+    with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> scaleX;
   late Animation<double> scaleY;
@@ -37,30 +38,43 @@ class _ShakeXState extends State<RubberBand> with SingleTickerProviderStateMixin
     super.initState();
     controller = AnimationController(vsync: this, duration: widget.duration)
       ..addStatusListener((status) {
-        if (status == AnimationStatus.completed && widget.completed is Function) {
+        if (status == AnimationStatus.completed &&
+            widget.completed is Function) {
           widget.completed!();
         }
       });
 
     scaleX = TweenSequence<double>([
-      TweenSequenceItem<double>(tween: Tween(begin: 1.0, end: 1.25), weight: 30.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 1.25, end: 0.75), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 0.75, end: 1.15), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 1.15, end: 0.95), weight: 15.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 0.95, end: 1.05), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 1.05, end: 1.0), weight: 25.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 1.0, end: 1.25), weight: 30.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 1.25, end: 0.75), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 0.75, end: 1.15), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 1.15, end: 0.95), weight: 15.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 0.95, end: 1.05), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 1.05, end: 1.0), weight: 25.0),
     ]).animate(CurvedAnimation(
       parent: controller,
       curve: widget.curve,
     ));
 
     scaleY = TweenSequence<double>([
-      TweenSequenceItem<double>(tween: Tween(begin: 1.0, end: 0.75), weight: 30.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 0.75, end: 1.25), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 1.25, end: 0.85), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 0.85, end: 1.05), weight: 15.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 1.05, end: 0.95), weight: 10.0),
-      TweenSequenceItem<double>(tween: Tween(begin: 0.95, end: 1.0), weight: 25.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 1.0, end: 0.75), weight: 30.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 0.75, end: 1.25), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 1.25, end: 0.85), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 0.85, end: 1.05), weight: 15.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 1.05, end: 0.95), weight: 10.0),
+      TweenSequenceItem<double>(
+          tween: Tween(begin: 0.95, end: 1.0), weight: 25.0),
     ]).animate(CurvedAnimation(
       parent: controller,
       curve: widget.curve,
