@@ -21,7 +21,7 @@ This project is my personal learning project (if successful, it will be integrat
 * [x] headShake
 * [x] swing
 * [x] tada
-* [ ] wobble
+* [x] wobble
 * [ ] jello
 * [x] heartBeat
 
