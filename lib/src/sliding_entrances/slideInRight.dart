@@ -87,7 +87,7 @@ class _GrowTransition extends StatelessWidget {
       animation: controller,
       builder: (context, child) {
         return FractionalTranslation(
-          translation: Offset(0.0, offset.value),
+          translation: Offset(offset.value, 0.0),
           child: child,
         );
       },
