@@ -129,10 +129,10 @@ This project is my personal learning project (if successful, it will be integrat
 * [x] zoomOutUp
 
 ### Sliding entrances
-* [ ] slideInDown
-* [ ] slideInLeft
-* [ ] slideInRight
-* [ ] slideInUp
+* [x] slideInDown
+* [x] slideInLeft
+* [x] slideInRight
+* [x] slideInUp
 
 ### Sliding exits
 * [ ] slideOutDown
