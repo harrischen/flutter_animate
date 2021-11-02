@@ -22,7 +22,7 @@ This project is my personal learning project (if successful, it will be integrat
 * [x] swing
 * [x] tada
 * [x] wobble
-* [ ] jello
+* [x] jello
 * [x] heartBeat
 
 ### Back entrances

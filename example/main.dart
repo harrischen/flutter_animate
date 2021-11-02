@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:motion/motion.dart';
-import 'package:motion/src/attention-seekers/wobble.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,7 +18,7 @@ class MyApp extends StatelessWidget {
           title: Text('Animate Demo'),
         ),
         body: Center(
-          child: Wobble(
+          child: Jello(
             completed: () {
               print('=========completed=========');
             },
