@@ -52,34 +52,26 @@ This project is my personal learning project (if successful, it will be integrat
 * [ ] bounceOutUp
 
 ### Fading entrances
-* [ ] fadeIn
-* [ ] fadeInDown
-* [ ] fadeInDownBig
-* [ ] fadeInLeft
-* [ ] fadeInLeftBig
-* [ ] fadeInRight
-* [ ] fadeInRightBig
-* [ ] fadeInUp
-* [ ] fadeInUpBig
-* [ ] fadeInTopLeft
-* [ ] fadeInTopRight
-* [ ] fadeInBottomLeft
-* [ ] fadeInBottomRight
+* [x] fadeIn
+* [x] fadeInDown
+* [x] fadeInLeft
+* [x] fadeInRight
+* [x] fadeInUp
+* [x] fadeInTopLeft
+* [x] fadeInTopRight
+* [x] fadeInBottomLeft
+* [x] fadeInBottomRight
 
 ### Fading exits
-* [ ] fadeOut
-* [ ] fadeOutDown
-* [ ] fadeOutDownBig
-* [ ] fadeOutLeft
-* [ ] fadeOutLeftBig
-* [ ] fadeOutRight
-* [ ] fadeOutRightBig
-* [ ] fadeOutUp
-* [ ] fadeOutUpBig
-* [ ] fadeOutTopLeft
-* [ ] fadeOutTopRight
-* [ ] fadeOutBottomRight
-* [ ] fadeOutBottomLeft
+* [x] fadeOut
+* [x] fadeOutDown
+* [x] fadeOutLeft
+* [x] fadeOutRight
+* [x] fadeOutUp
+* [x] fadeOutTopLeft
+* [x] fadeOutTopRight
+* [x] fadeOutBottomRight
+* [x] fadeOutBottomLeft
 
 ### Flippers
 * [ ] flip
