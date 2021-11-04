@@ -26,10 +26,10 @@ This project is my personal learning project (if successful, it will be integrat
 * [x] heartBeat
 
 ### Back entrances
-* [ ] backInDown
-* [ ] backInLeft
-* [ ] backInRight
-* [ ] backInUp
+* [x] backInDown
+* [x] backInLeft
+* [x] backInRight
+* [x] backInUp
 
 ### Back exits
 * [ ] backOutDown
