@@ -11,7 +11,7 @@ class BackInDown extends StatefulWidget {
         color: Colors.lightBlue,
       ),
     ),
-    this.curve = Curves.ease,
+    this.curve = Curves.easeInOut,
     this.duration = const Duration(milliseconds: 1000),
     this.delay = const Duration(milliseconds: 1000),
     this.completed,
@@ -27,8 +27,7 @@ class BackInDown extends StatefulWidget {
   _BackInDownState createState() => _BackInDownState();
 }
 
-class _BackInDownState extends State<BackInDown>
-    with SingleTickerProviderStateMixin {
+class _BackInDownState extends State<BackInDown> with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> translateY;
   late Animation<double> scale;
@@ -40,27 +39,49 @@ class _BackInDownState extends State<BackInDown>
 
     controller = AnimationController(duration: widget.duration, vsync: this)
       ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
+        if (status == AnimationStatus.completed && widget.completed is Function) {
           widget.completed!();
         }
       });
 
-    final curve = CurvedAnimation(parent: controller, curve: widget.curve);
     translateY = TweenSequence([
-      TweenSequenceItem(tween: Tween(begin: -1200.0, end: 0.0), weight: 80),
-      TweenSequenceItem(tween: ConstantTween(0.0), weight: 20),
-    ]).animate(curve);
+      TweenSequenceItem(
+        tween: Tween(begin: -1200.0, end: 0.0).chain(
+          CurveTween(curve: widget.curve),
+        ),
+        weight: 85,
+      ),
+      // pause for a while
+      TweenSequenceItem(tween: ConstantTween(0.0), weight: 5),
+      // continue to run to the end
+      TweenSequenceItem(tween: ConstantTween(0.0), weight: 10),
+    ]).animate(controller);
 
     scale = TweenSequence([
-      TweenSequenceItem(tween: ConstantTween(0.7), weight: 80),
-      TweenSequenceItem(tween: Tween(begin: 0.7, end: 1.0), weight: 20),
-    ]).animate(curve);
+      TweenSequenceItem(
+        tween: ConstantTween(0.7).chain(
+          CurveTween(curve: widget.curve),
+        ),
+        weight: 85,
+      ),
+      // pause for a while
+      TweenSequenceItem(tween: ConstantTween(0.7), weight: 5),
+      // continue to run to the end
+      TweenSequenceItem(tween: Tween(begin: 0.7, end: 1.0), weight: 10),
+    ]).animate(controller);
 
     opacity = TweenSequence([
-      TweenSequenceItem(tween: ConstantTween(0.7), weight: 80),
-      TweenSequenceItem(tween: Tween(begin: 0.7, end: 1.0), weight: 20),
-    ]).animate(curve);
+      TweenSequenceItem(
+        tween: ConstantTween(0.7).chain(
+          CurveTween(curve: widget.curve),
+        ),
+        weight: 85,
+      ),
+      // pause for a while
+      TweenSequenceItem(tween: ConstantTween(0.7), weight: 5),
+      // continue to run to the end
+      TweenSequenceItem(tween: Tween(begin: 0.7, end: 1.0), weight: 10),
+    ]).animate(controller);
 
     Future.delayed(widget.delay, () {
       controller.forward();
@@ -106,8 +127,7 @@ class BackInDownGrowTransition extends StatelessWidget {
     return AnimatedBuilder(
       animation: scale,
       builder: (context, child) {
-        final _scale =
-            Matrix4.diagonal3Values(scale.value, scale.value, scale.value);
+        final _scale = Matrix4.diagonal3Values(scale.value, scale.value, scale.value);
         final _offset = Matrix4.translationValues(0.0, translateY.value, 0.0);
         return Transform(
           alignment: Alignment.center,
