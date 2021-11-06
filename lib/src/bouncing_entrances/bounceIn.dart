@@ -58,15 +58,10 @@ class BbounceInState extends State<BounceIn>
       ),
     );
 
-    opacity = TweenSequence([
-      TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.0), weight: 60),
-      TweenSequenceItem(tween: ConstantTween(1.0), weight: 40),
-    ]).animate(
-      CurvedAnimation(
-        parent: controller,
-        curve: widget.curve,
-      ),
-    );
+    opacity = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+      parent: controller,
+      curve: Interval(0, 0.60),
+    ));
 
     Future.delayed(widget.delay, () {
       controller.forward();
