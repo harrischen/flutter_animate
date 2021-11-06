@@ -38,11 +38,11 @@ This project is my personal learning project (if successful, it will be integrat
 * [ ] backOutUp
 
 ### Bouncing entrances
-* [ ] bounceIn
-* [ ] bounceInDown
-* [ ] bounceInLeft
-* [ ] bounceInRight
-* [ ] bounceInUp
+* [x] bounceIn
+* [x] bounceInDown
+* [x] bounceInLeft
+* [x] bounceInRight
+* [x] bounceInUp
 
 ### Bouncing exits
 * [ ] bounceOut
