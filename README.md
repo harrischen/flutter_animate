@@ -45,11 +45,11 @@ This project is my personal learning project (if successful, it will be integrat
 * [x] bounceInUp
 
 ### Bouncing exits
-* [ ] bounceOut
-* [ ] bounceOutDown
-* [ ] bounceOutLeft
-* [ ] bounceOutRight
-* [ ] bounceOutUp
+* [x] bounceOut
+* [x] bounceOutDown
+* [x] bounceOutLeft
+* [x] bounceOutRight
+* [x] bounceOutUp
 
 ### Fading entrances
 * [x] fadeIn

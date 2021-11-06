@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
           title: Text('Animate Demo'),
         ),
         body: Center(
-          child: BounceInDown(
+          child: BounceOutDown(
             completed: () {
               print('=========completed=========');
             },
