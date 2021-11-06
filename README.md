@@ -32,10 +32,10 @@ This project is my personal learning project (if successful, it will be integrat
 * [x] backInUp
 
 ### Back exits
-* [ ] backOutDown
-* [ ] backOutLeft
-* [ ] backOutRight
-* [ ] backOutUp
+* [x] backOutDown
+* [x] backOutLeft
+* [x] backOutRight
+* [x] backOutUp
 
 ### Bouncing entrances
 * [x] bounceIn
