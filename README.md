@@ -74,11 +74,11 @@ This project is my personal learning project (if successful, it will be integrat
 * [x] fadeOutBottomLeft
 
 ### Flippers
-* [ ] flip
-* [ ] flipInX
-* [ ] flipInY
-* [ ] flipOutX
-* [ ] flipOutY
+* [x] flip
+* [x] flipInX
+* [x] flipInY
+* [x] flipOutX
+* [x] flipOutY
 
 ### Lightspeed
 * [ ] lightSpeedInRight
