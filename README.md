@@ -81,10 +81,10 @@ This project is my personal learning project (if successful, it will be integrat
 * [x] flipOutY
 
 ### Lightspeed
-* [ ] lightSpeedInRight
-* [ ] lightSpeedInLeft
-* [ ] lightSpeedOutRight
-* [ ] lightSpeedOutLeft
+* [x] lightSpeedInRight
+* [x] lightSpeedInLeft
+* [x] lightSpeedOutRight
+* [x] lightSpeedOutLeft
 
 ### Rotating entrances
 * [ ] rotateIn
