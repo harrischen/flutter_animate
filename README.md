@@ -87,11 +87,11 @@ This project is my personal learning project (if successful, it will be integrat
 * [x] lightSpeedOutLeft
 
 ### Rotating entrances
-* [ ] rotateIn
-* [ ] rotateInDownLeft
-* [ ] rotateInDownRight
-* [ ] rotateInUpLeft
-* [ ] rotateInUpRight
+* [x] rotateIn
+* [x] rotateInDownLeft
+* [x] rotateInDownRight
+* [x] rotateInUpLeft
+* [x] rotateInUpRight
 
 ### Rotating exits
 * [ ] rotateOut
