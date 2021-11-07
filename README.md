@@ -94,11 +94,11 @@ This project is my personal learning project (if successful, it will be integrat
 * [x] rotateInUpRight
 
 ### Rotating exits
-* [ ] rotateOut
-* [ ] rotateOutDownLeft
-* [ ] rotateOutDownRight
-* [ ] rotateOutUpLeft
-* [ ] rotateOutUpRight
+* [x] rotateOut
+* [x] rotateOutDownLeft
+* [x] rotateOutDownRight
+* [x] rotateOutUpLeft
+* [x] rotateOutUpRight
 
 ### Specials
 * [ ] hinge
