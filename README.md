@@ -103,8 +103,10 @@ This project is my personal learning project (if successful, it will be integrat
 ### Specials
 * [ ] hinge
 * [ ] jackInTheBox
-* [ ] rollIn
-* [ ] rollOut
+* [ ] rollInLeft
+* [ ] rollInRight
+* [ ] rollOutLeft
+* [ ] rollOutRight
 
 ### Zooming entrances
 * [x] zoomIn

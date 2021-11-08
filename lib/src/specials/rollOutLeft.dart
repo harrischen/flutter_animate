@@ -1,11 +1,11 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-class JackInTheBox extends StatefulWidget {
-  const JackInTheBox({
+class RollOutLeft extends StatefulWidget {
+  const RollOutLeft({
     Key? key,
     this.child = const Text(
-      'JackInTheBox',
+      'RollOutLeft',
       style: TextStyle(
         fontSize: 40,
         fontWeight: FontWeight.bold,
@@ -14,7 +14,7 @@ class JackInTheBox extends StatefulWidget {
     ),
     this.duration = const Duration(milliseconds: 1000),
     this.delay = const Duration(milliseconds: 1000),
-    this.curve = Curves.ease,
+    this.curve = Curves.easeInOut,
     this.completed,
   }) : super(key: key);
 
@@ -25,13 +25,12 @@ class JackInTheBox extends StatefulWidget {
   final VoidCallback? completed;
 
   @override
-  _JackInTheBoxState createState() => _JackInTheBoxState();
+  _RollOutLeftState createState() => _RollOutLeftState();
 }
 
-class _JackInTheBoxState extends State<JackInTheBox>
-    with SingleTickerProviderStateMixin {
+class _RollOutLeftState extends State<RollOutLeft> with SingleTickerProviderStateMixin {
   late AnimationController controller;
-  late Animation<double> scale;
+  late Animation<double> translate;
   late Animation<double> rotate;
   late Animation<double> opacity;
 
@@ -40,26 +39,30 @@ class _JackInTheBoxState extends State<JackInTheBox>
     super.initState();
     controller = AnimationController(vsync: this, duration: widget.duration)
       ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
+        if (status == AnimationStatus.completed && widget.completed is Function) {
           widget.completed!();
         }
       });
 
-    scale = Tween(begin: 0.1, end: 1.0).animate(
-      CurvedAnimation(parent: controller, curve: widget.curve),
+    translate = Tween(begin: 0.0, end: -1.0).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: widget.curve,
+      ),
     );
 
-    rotate = TweenSequence([
-      TweenSequenceItem(tween: Tween(begin: 30.0, end: -10.0), weight: 50.0),
-      TweenSequenceItem(tween: Tween(begin: -10.0, end: 3.0), weight: 20.0),
-      TweenSequenceItem(tween: Tween(begin: 3.0, end: 0.0), weight: 30.0),
-    ]).animate(
-      CurvedAnimation(parent: controller, curve: widget.curve),
+    rotate = Tween(begin: 0.0, end: 120.0).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: widget.curve,
+      ),
     );
 
-    opacity = Tween(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: controller, curve: widget.curve),
+    opacity = Tween(begin: 1.0, end: 0.0).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: widget.curve,
+      ),
     );
 
     Future.delayed(widget.delay, () {
@@ -78,7 +81,7 @@ class _JackInTheBoxState extends State<JackInTheBox>
     return _GrowTransition(
       child: widget.child,
       controller: controller,
-      scale: scale,
+      translate: translate,
       rotate: rotate,
       opacity: opacity,
     );
@@ -91,13 +94,13 @@ class _GrowTransition extends StatelessWidget {
     required this.controller,
     required this.child,
     required this.rotate,
-    required this.scale,
+    required this.translate,
     required this.opacity,
   }) : super(key: key);
 
   final Widget child;
   final AnimationController controller;
-  final Animation<double> scale;
+  final Animation<double> translate;
   final Animation<double> rotate;
   final Animation<double> opacity;
 
@@ -106,14 +109,15 @@ class _GrowTransition extends StatelessWidget {
     return AnimatedBuilder(
       animation: controller,
       builder: (context, child) {
-        return Transform(
-          alignment: FractionalOffset.bottomCenter,
-          transform: Matrix4.identity()
-            ..rotateX(rotate.value * pi / 180)
-            ..scale(scale.value),
-          child: Opacity(
-            opacity: opacity.value,
-            child: child,
+        return FractionalTranslation(
+          translation: Offset(translate.value, 0.0),
+          child: Transform.rotate(
+            alignment: FractionalOffset.center,
+            angle: rotate.value * pi / 180,
+            child: Opacity(
+              opacity: opacity.value,
+              child: child,
+            ),
           ),
         );
       },
