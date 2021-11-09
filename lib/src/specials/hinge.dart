@@ -39,7 +39,8 @@ class _HingeState extends State<Hinge> with SingleTickerProviderStateMixin {
     super.initState();
     controller = AnimationController(vsync: this, duration: widget.duration)
       ..addStatusListener((status) {
-        if (status == AnimationStatus.completed && widget.completed is Function) {
+        if (status == AnimationStatus.completed &&
+            widget.completed is Function) {
           widget.completed!();
         }
       });
@@ -47,24 +48,42 @@ class _HingeState extends State<Hinge> with SingleTickerProviderStateMixin {
     translate = Tween(begin: 0.0, end: 700.0).animate(
       CurvedAnimation(
         parent: controller,
-        curve: Interval(0.8, 1.0),
+        curve: Interval(0.8, 1.0, curve: widget.curve),
       ),
     );
 
     rotate = TweenSequence([
-      TweenSequenceItem(tween: Tween(begin: 0.0, end: 80.0), weight: 20.0),
-      TweenSequenceItem(tween: Tween(begin: 80.0, end: 60.0), weight: 20.0),
-      TweenSequenceItem(tween: Tween(begin: 60.0, end: 80.0), weight: 20.0),
-      TweenSequenceItem(tween: Tween(begin: 80.0, end: 60.0), weight: 20.0),
-      TweenSequenceItem(tween: Tween(begin: 60.0, end: 0.0), weight: 20.0),
-    ]).animate(
-      CurvedAnimation(parent: controller, curve: widget.curve),
-    );
+      TweenSequenceItem(
+        tween: Tween(begin: 0.0, end: 80.0).chain(
+          CurveTween(curve: widget.curve),
+        ),
+        weight: 20.0,
+      ),
+      TweenSequenceItem(
+        tween: Tween(begin: 80.0, end: 60.0).chain(
+          CurveTween(curve: widget.curve),
+        ),
+        weight: 20.0,
+      ),
+      TweenSequenceItem(
+        tween: Tween(begin: 60.0, end: 80.0).chain(
+          CurveTween(curve: widget.curve),
+        ),
+        weight: 20.0,
+      ),
+      TweenSequenceItem(
+        tween: Tween(begin: 80.0, end: 60.0).chain(
+          CurveTween(curve: widget.curve),
+        ),
+        weight: 20.0,
+      ),
+      TweenSequenceItem(tween: ConstantTween(60.0), weight: 20.0),
+    ]).animate(controller);
 
     opacity = Tween(begin: 1.0, end: 0.0).animate(
       CurvedAnimation(
         parent: controller,
-        curve: Interval(0.8, 1.0),
+        curve: Interval(0.8, 1.0, curve: widget.curve),
       ),
     );
 
@@ -112,11 +131,11 @@ class _GrowTransition extends StatelessWidget {
     return AnimatedBuilder(
       animation: controller,
       builder: (context, child) {
-        return Transform.rotate(
-          alignment: FractionalOffset.topLeft,
-          angle: rotate.value * pi / 180,
-          child: Transform.translate(
-            offset: Offset(0.0, translate.value),
+        return Transform.translate(
+          offset: Offset(0.0, translate.value),
+          child: Transform.rotate(
+            alignment: FractionalOffset.topLeft,
+            angle: rotate.value * pi / 180,
             child: Opacity(
               opacity: opacity.value,
               child: child,
