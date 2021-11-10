@@ -16,6 +16,7 @@ class Hinge extends StatefulWidget {
     this.delay = const Duration(milliseconds: 1000),
     this.curve = Curves.ease,
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
@@ -23,6 +24,7 @@ class Hinge extends StatefulWidget {
   final Duration delay;
   final Curve curve;
   final VoidCallback? completed;
+  final Function(AnimationController)? controller;
 
   @override
   _HingeState createState() => _HingeState();
@@ -39,11 +41,14 @@ class _HingeState extends State<Hinge> with SingleTickerProviderStateMixin {
     super.initState();
     controller = AnimationController(vsync: this, duration: widget.duration)
       ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
+        if (status == AnimationStatus.completed && widget.completed is Function) {
           widget.completed!();
         }
       });
+
+    if (widget.controller is Function) {
+      widget.controller!(controller);
+    }
 
     translate = Tween(begin: 0.0, end: 700.0).animate(
       CurvedAnimation(
