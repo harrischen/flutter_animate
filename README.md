@@ -101,12 +101,12 @@ This project is my personal learning project (if successful, it will be integrat
 * [x] rotateOutUpRight
 
 ### Specials
-* [ ] hinge
-* [ ] jackInTheBox
-* [ ] rollInLeft
-* [ ] rollInRight
-* [ ] rollOutLeft
-* [ ] rollOutRight
+* [x] hinge
+* [x] jackInTheBox
+* [x] rollInLeft
+* [x] rollInRight
+* [x] rollOutLeft
+* [x] rollOutRight
 
 ### Zooming entrances
 * [x] zoomIn
