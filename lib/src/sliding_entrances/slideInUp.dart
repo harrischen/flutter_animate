@@ -15,6 +15,7 @@ class SlideInUp extends StatefulWidget {
     this.delay = const Duration(milliseconds: 1000),
     this.curve = Curves.ease,
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
@@ -22,6 +23,7 @@ class SlideInUp extends StatefulWidget {
   final Duration delay;
   final Curve curve;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   _SlideInUpState createState() => _SlideInUpState();
@@ -36,25 +38,26 @@ class _SlideInUpState extends State<SlideInUp>
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(duration: widget.duration, vsync: this)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
 
     offset = Tween<double>(begin: 1.0, end: 0.0).animate(CurvedAnimation(
       parent: controller,
       curve: widget.curve,
     ));
 
-    Future.delayed(widget.delay, () {
-      setState(() {
-        visible = true;
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () {
+        setState(() => visible = true);
+        controller.forward();
       });
-      controller.forward();
-    });
+    }
   }
 
   @override

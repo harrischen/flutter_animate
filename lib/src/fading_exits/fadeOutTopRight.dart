@@ -15,6 +15,7 @@ class FadeOutTopRight extends StatefulWidget {
     this.delay = const Duration(milliseconds: 1000),
     this.curve = Curves.ease,
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
@@ -22,12 +23,14 @@ class FadeOutTopRight extends StatefulWidget {
   final Duration delay;
   final Curve curve;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   _FadeOutTopRightState createState() => _FadeOutTopRightState();
 }
 
-class _FadeOutTopRightState extends State<FadeOutTopRight> with SingleTickerProviderStateMixin {
+class _FadeOutTopRightState extends State<FadeOutTopRight>
+    with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<Offset> offset;
   late Animation<double> opacity;
@@ -35,12 +38,14 @@ class _FadeOutTopRightState extends State<FadeOutTopRight> with SingleTickerProv
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(duration: widget.duration, vsync: this)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed && widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
 
     offset = Tween<Offset>(
       begin: const Offset(0.0, 0.0),
@@ -55,9 +60,9 @@ class _FadeOutTopRightState extends State<FadeOutTopRight> with SingleTickerProv
       curve: widget.curve,
     ));
 
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () => controller.forward());
+    }
   }
 
   @override

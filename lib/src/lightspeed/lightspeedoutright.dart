@@ -13,16 +13,18 @@ class LightSpeedOutRight extends StatefulWidget {
       ),
     ),
     this.duration = const Duration(milliseconds: 1000),
-    this.curve = Curves.easeIn,
     this.delay = const Duration(milliseconds: 1000),
+    this.curve = Curves.easeIn,
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
   final Duration duration;
-  final Curve curve;
   final Duration delay;
+  final Curve curve;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   _LightSpeedOutRightState createState() => _LightSpeedOutRightState();
@@ -38,14 +40,14 @@ class _LightSpeedOutRightState extends State<LightSpeedOutRight>
   @override
   void initState() {
     super.initState();
-
-    controller = AnimationController(duration: widget.duration, vsync: this)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
 
     translate = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: controller,
@@ -62,9 +64,9 @@ class _LightSpeedOutRightState extends State<LightSpeedOutRight>
       curve: widget.curve,
     ));
 
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () => controller.forward());
+    }
   }
 
   @override
@@ -75,7 +77,7 @@ class _LightSpeedOutRightState extends State<LightSpeedOutRight>
 
   @override
   Widget build(BuildContext context) {
-    return LightSpeedOutRightGrowTransition(
+    return _GrowTransition(
       child: widget.child,
       controller: controller,
       translate: translate,
@@ -85,8 +87,8 @@ class _LightSpeedOutRightState extends State<LightSpeedOutRight>
   }
 }
 
-class LightSpeedOutRightGrowTransition extends StatelessWidget {
-  const LightSpeedOutRightGrowTransition({
+class _GrowTransition extends StatelessWidget {
+  const _GrowTransition({
     Key? key,
     required this.child,
     required this.controller,

@@ -14,13 +14,17 @@ class HeadShake extends StatefulWidget {
     ),
     this.duration = const Duration(milliseconds: 1000),
     this.delay = const Duration(milliseconds: 1000),
+    this.curve = Curves.ease,
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
   final Duration duration;
   final Duration delay;
+  final Curve curve;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   _HeadShakeState createState() => _HeadShakeState();
@@ -35,13 +39,14 @@ class _HeadShakeState extends State<HeadShake>
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(vsync: this, duration: widget.duration)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
 
     translateX = TweenSequence<double>([
       TweenSequenceItem<double>(
@@ -76,9 +81,12 @@ class _HeadShakeState extends State<HeadShake>
       parent: controller,
       curve: Curves.easeInOut,
     ));
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
+
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () {
+        controller.forward();
+      });
+    }
   }
 
   @override

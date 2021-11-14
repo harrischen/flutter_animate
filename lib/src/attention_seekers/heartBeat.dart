@@ -15,6 +15,7 @@ class HeartBeat extends StatefulWidget {
     this.delay = const Duration(milliseconds: 1000),
     this.curve = Curves.easeInOut,
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
@@ -22,6 +23,7 @@ class HeartBeat extends StatefulWidget {
   final Duration delay;
   final Curve curve;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   _HeartBeatState createState() => _HeartBeatState();
@@ -35,13 +37,14 @@ class _HeartBeatState extends State<HeartBeat>
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(vsync: this, duration: widget.duration)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
 
     scale = TweenSequence<double>([
       TweenSequenceItem<double>(
@@ -76,9 +79,11 @@ class _HeartBeatState extends State<HeartBeat>
       ),
     ]).animate(controller);
 
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () {
+        controller.forward();
+      });
+    }
   }
 
   @override

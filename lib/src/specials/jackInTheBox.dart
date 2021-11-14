@@ -16,6 +16,7 @@ class JackInTheBox extends StatefulWidget {
     this.delay = const Duration(milliseconds: 1000),
     this.curve = Curves.easeInOut,
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
@@ -23,12 +24,14 @@ class JackInTheBox extends StatefulWidget {
   final Duration delay;
   final Curve curve;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   _JackInTheBoxState createState() => _JackInTheBoxState();
 }
 
-class _JackInTheBoxState extends State<JackInTheBox> with SingleTickerProviderStateMixin {
+class _JackInTheBoxState extends State<JackInTheBox>
+    with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> scale;
   late Animation<double> rotate;
@@ -37,12 +40,14 @@ class _JackInTheBoxState extends State<JackInTheBox> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(vsync: this, duration: widget.duration)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed && widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
 
     scale = Tween(begin: 0.1, end: 1.0).animate(
       CurvedAnimation(
@@ -70,9 +75,11 @@ class _JackInTheBoxState extends State<JackInTheBox> with SingleTickerProviderSt
       ),
     );
 
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () {
+        controller.forward();
+      });
+    }
   }
 
   @override

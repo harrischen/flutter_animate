@@ -16,6 +16,7 @@ class Wobble extends StatefulWidget {
     this.delay = const Duration(milliseconds: 1000),
     this.curve = Curves.linear,
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
@@ -23,6 +24,7 @@ class Wobble extends StatefulWidget {
   final Duration delay;
   final Curve curve;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   _ShakeXState createState() => _ShakeXState();
@@ -36,13 +38,14 @@ class _ShakeXState extends State<Wobble> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(vsync: this, duration: widget.duration)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
 
     rotateZ = TweenSequence<double>([
       TweenSequenceItem<double>(
@@ -80,9 +83,11 @@ class _ShakeXState extends State<Wobble> with SingleTickerProviderStateMixin {
       curve: widget.curve,
     ));
 
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () {
+        controller.forward();
+      });
+    }
   }
 
   @override
@@ -121,13 +126,6 @@ class _GrowTransition extends StatelessWidget {
     return AnimatedBuilder(
       animation: controller,
       builder: (context, child) {
-        // final _rotate = Matrix4.rotationZ(rotateZ.value * pi / 180);
-        // final _offset = Matrix4.translationValues(offset.value, 0.0, 0.0);
-        // return Transform(
-        //   alignment: Alignment.center,
-        //   transform: _rotate..add(_offset),
-        //   child: child,
-        // );
         return Transform.rotate(
           angle: rotateZ.value * pi / 180,
           child: FractionalTranslation(

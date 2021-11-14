@@ -14,13 +14,17 @@ class Flip extends StatefulWidget {
     ),
     this.duration = const Duration(milliseconds: 1000),
     this.delay = const Duration(milliseconds: 1000),
+    this.curve = Curves.ease,
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
   final Duration duration;
   final Duration delay;
+  final Curve curve;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   _FlipState createState() => _FlipState();
@@ -35,14 +39,14 @@ class _FlipState extends State<Flip> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
-    controller = AnimationController(duration: widget.duration, vsync: this)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
 
     scale = TweenSequence([
       TweenSequenceItem(
@@ -113,9 +117,9 @@ class _FlipState extends State<Flip> with SingleTickerProviderStateMixin {
       ),
     ]).animate(controller);
 
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () => controller.forward());
+    }
   }
 
   @override
@@ -126,7 +130,7 @@ class _FlipState extends State<Flip> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return FlipGrowTransition(
+    return _GrowTransition(
       child: widget.child,
       controller: controller,
       scale: scale,
@@ -136,8 +140,8 @@ class _FlipState extends State<Flip> with SingleTickerProviderStateMixin {
   }
 }
 
-class FlipGrowTransition extends StatelessWidget {
-  const FlipGrowTransition({
+class _GrowTransition extends StatelessWidget {
+  const _GrowTransition({
     Key? key,
     required this.child,
     required this.controller,

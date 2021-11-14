@@ -11,17 +11,19 @@ class BounceIn extends StatefulWidget {
         color: Colors.lightBlue,
       ),
     ),
-    this.curve = const Cubic(0.215, 0.61, 0.355, 1),
     this.duration = const Duration(milliseconds: 1000),
     this.delay = const Duration(milliseconds: 1000),
+    this.curve = const Cubic(0.215, 0.61, 0.355, 1),
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
-  final Curve curve;
   final Duration duration;
   final Duration delay;
+  final Curve curve;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   BbounceInState createState() => BbounceInState();
@@ -36,14 +38,14 @@ class BbounceInState extends State<BounceIn>
   @override
   void initState() {
     super.initState();
-
-    controller = AnimationController(duration: widget.duration, vsync: this)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
 
     scale = TweenSequence([
       TweenSequenceItem(tween: Tween(begin: 0.3, end: 1.1), weight: 20),
@@ -63,9 +65,9 @@ class BbounceInState extends State<BounceIn>
       curve: Interval(0, 0.60),
     ));
 
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () => controller.forward());
+    }
   }
 
   @override
@@ -76,7 +78,7 @@ class BbounceInState extends State<BounceIn>
 
   @override
   Widget build(BuildContext context) {
-    return BounceInGrowTransition(
+    return _GrowTransition(
       child: widget.child,
       controller: controller,
       scale: scale,
@@ -85,8 +87,8 @@ class BbounceInState extends State<BounceIn>
   }
 }
 
-class BounceInGrowTransition extends StatelessWidget {
-  const BounceInGrowTransition({
+class _GrowTransition extends StatelessWidget {
+  const _GrowTransition({
     Key? key,
     required this.child,
     required this.controller,

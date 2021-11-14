@@ -11,17 +11,19 @@ class BounceOut extends StatefulWidget {
         color: Colors.lightBlue,
       ),
     ),
-    this.curve = Curves.ease,
     this.duration = const Duration(milliseconds: 1000),
     this.delay = const Duration(milliseconds: 1000),
+    this.curve = Curves.ease,
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
-  final Curve curve;
   final Duration duration;
   final Duration delay;
+  final Curve curve;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   BbounceOutState createState() => BbounceOutState();
@@ -36,14 +38,14 @@ class BbounceOutState extends State<BounceOut>
   @override
   void initState() {
     super.initState();
-
-    controller = AnimationController(duration: widget.duration, vsync: this)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
 
     scale = TweenSequence([
       TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.9), weight: 20),
@@ -67,9 +69,9 @@ class BbounceOutState extends State<BounceOut>
       ),
     );
 
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () => controller.forward());
+    }
   }
 
   @override
@@ -80,7 +82,7 @@ class BbounceOutState extends State<BounceOut>
 
   @override
   Widget build(BuildContext context) {
-    return BounceOutGrowTransition(
+    return _GrowTransition(
       child: widget.child,
       controller: controller,
       scale: scale,
@@ -89,8 +91,8 @@ class BbounceOutState extends State<BounceOut>
   }
 }
 
-class BounceOutGrowTransition extends StatelessWidget {
-  const BounceOutGrowTransition({
+class _GrowTransition extends StatelessWidget {
+  const _GrowTransition({
     Key? key,
     required this.child,
     required this.controller,

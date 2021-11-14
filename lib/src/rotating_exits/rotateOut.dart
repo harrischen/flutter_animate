@@ -16,6 +16,7 @@ class RotateOut extends StatefulWidget {
     this.duration = const Duration(milliseconds: 1000),
     this.delay = const Duration(milliseconds: 1000),
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
@@ -23,6 +24,7 @@ class RotateOut extends StatefulWidget {
   final Duration duration;
   final Duration delay;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   _RotateOutState createState() => _RotateOutState();
@@ -37,14 +39,14 @@ class _RotateOutState extends State<RotateOut>
   @override
   void initState() {
     super.initState();
-
-    controller = AnimationController(duration: widget.duration, vsync: this)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
 
     rotate = Tween(begin: 0.0, end: 200.0).animate(CurvedAnimation(
       parent: controller,
@@ -56,9 +58,9 @@ class _RotateOutState extends State<RotateOut>
       curve: widget.curve,
     ));
 
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () => controller.forward());
+    }
   }
 
   @override

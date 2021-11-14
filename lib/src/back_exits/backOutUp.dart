@@ -11,17 +11,19 @@ class BackOutUp extends StatefulWidget {
         color: Colors.lightBlue,
       ),
     ),
-    this.curve = Curves.easeOut,
     this.duration = const Duration(milliseconds: 1000),
     this.delay = const Duration(milliseconds: 1000),
+    this.curve = Curves.easeOut,
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
-  final Curve curve;
   final Duration duration;
   final Duration delay;
+  final Curve curve;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   _BackOutUpState createState() => _BackOutUpState();
@@ -37,14 +39,14 @@ class _BackOutUpState extends State<BackOutUp>
   @override
   void initState() {
     super.initState();
-
-    controller = AnimationController(duration: widget.duration, vsync: this)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
 
     translateY = TweenSequence([
       TweenSequenceItem(tween: ConstantTween(0.0), weight: 15),
@@ -85,9 +87,9 @@ class _BackOutUpState extends State<BackOutUp>
       ),
     ]).animate(controller);
 
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () => controller.forward());
+    }
   }
 
   @override
@@ -98,7 +100,7 @@ class _BackOutUpState extends State<BackOutUp>
 
   @override
   Widget build(BuildContext context) {
-    return BackOutUpGrowTransition(
+    return _GrowTransition(
       child: widget.child,
       controller: controller,
       translateY: translateY,
@@ -108,8 +110,8 @@ class _BackOutUpState extends State<BackOutUp>
   }
 }
 
-class BackOutUpGrowTransition extends StatelessWidget {
-  const BackOutUpGrowTransition({
+class _GrowTransition extends StatelessWidget {
+  const _GrowTransition({
     Key? key,
     required this.child,
     required this.controller,

@@ -16,6 +16,7 @@ class RollOutRight extends StatefulWidget {
     this.delay = const Duration(milliseconds: 1000),
     this.curve = Curves.easeInOut,
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
@@ -23,12 +24,14 @@ class RollOutRight extends StatefulWidget {
   final Duration delay;
   final Curve curve;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   _RollOutRightState createState() => _RollOutRightState();
 }
 
-class _RollOutRightState extends State<RollOutRight> with SingleTickerProviderStateMixin {
+class _RollOutRightState extends State<RollOutRight>
+    with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> translate;
   late Animation<double> rotate;
@@ -37,12 +40,14 @@ class _RollOutRightState extends State<RollOutRight> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(vsync: this, duration: widget.duration)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed && widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
 
     translate = Tween(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
@@ -65,9 +70,11 @@ class _RollOutRightState extends State<RollOutRight> with SingleTickerProviderSt
       ),
     );
 
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () {
+        controller.forward();
+      });
+    }
   }
 
   @override

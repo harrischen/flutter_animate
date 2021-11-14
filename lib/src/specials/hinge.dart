@@ -91,9 +91,7 @@ class _HingeState extends State<Hinge> with SingleTickerProviderStateMixin {
     );
 
     if (!(widget.controller is AnimationController)) {
-      Future.delayed(widget.delay, () {
-        controller.forward();
-      });
+      Future.delayed(widget.delay, () => controller.forward());
     }
   }
 

@@ -12,17 +12,19 @@ class RotateInUpLeft extends StatefulWidget {
         color: Colors.lightBlue,
       ),
     ),
-    this.curve = Curves.ease,
     this.duration = const Duration(milliseconds: 1000),
     this.delay = const Duration(milliseconds: 1000),
+    this.curve = Curves.ease,
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
-  final Curve curve;
   final Duration duration;
   final Duration delay;
+  final Curve curve;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   _RotateInUpLeftState createState() => _RotateInUpLeftState();
@@ -37,14 +39,14 @@ class _RotateInUpLeftState extends State<RotateInUpLeft>
   @override
   void initState() {
     super.initState();
-
-    controller = AnimationController(duration: widget.duration, vsync: this)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
 
     rotate = Tween(begin: 45.0, end: 0.0).animate(CurvedAnimation(
       parent: controller,
@@ -56,9 +58,9 @@ class _RotateInUpLeftState extends State<RotateInUpLeft>
       curve: widget.curve,
     ));
 
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () => controller.forward());
+    }
   }
 
   @override

@@ -1,24 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// How to achieve zoomIn in animate.css
-/// @keyframes zoomInDown {
-///   from {
-///     opacity: 0;
-///     transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
-///     animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
-///   }
-///
-///   60% {
-///     opacity: 1;
-///     transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
-///     animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
-///   }
-/// }
-///
-/// .zoomInDown {
-///   animation-name: zoomInDown;
-/// }
-
 class ZoomInDown extends StatefulWidget {
   const ZoomInDown({
     Key? key,
@@ -31,20 +12,25 @@ class ZoomInDown extends StatefulWidget {
       ),
     ),
     this.duration = const Duration(milliseconds: 1000),
-    this.delay = const Duration(milliseconds: 0),
+    this.delay = const Duration(milliseconds: 1000),
+    this.curve = Curves.ease,
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
   final Duration duration;
   final Duration delay;
+  final Curve curve;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   _ZoomInDownState createState() => _ZoomInDownState();
 }
 
-class _ZoomInDownState extends State<ZoomInDown> with SingleTickerProviderStateMixin {
+class _ZoomInDownState extends State<ZoomInDown>
+    with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> scale;
   late Animation<double> opacity;
@@ -53,12 +39,15 @@ class _ZoomInDownState extends State<ZoomInDown> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(duration: widget.duration, vsync: this)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed && widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
+
     opacity = TweenSequence<double>(<TweenSequenceItem<double>>[
       TweenSequenceItem(
         tween: Tween<double>(begin: 0.0, end: 1.0).chain(CurveTween(
@@ -104,20 +93,9 @@ class _ZoomInDownState extends State<ZoomInDown> with SingleTickerProviderStateM
       ),
     ]).animate(controller);
 
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ZoomInDownGrowTransition(
-      child: widget.child,
-      controller: controller,
-      scale: scale,
-      opacity: opacity,
-      offset: offset,
-    );
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () => controller.forward());
+    }
   }
 
   @override
@@ -125,10 +103,21 @@ class _ZoomInDownState extends State<ZoomInDown> with SingleTickerProviderStateM
     controller.dispose();
     super.dispose();
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return _GrowTransition(
+      child: widget.child,
+      controller: controller,
+      scale: scale,
+      opacity: opacity,
+      offset: offset,
+    );
+  }
 }
 
-class ZoomInDownGrowTransition extends StatelessWidget {
-  const ZoomInDownGrowTransition({
+class _GrowTransition extends StatelessWidget {
+  const _GrowTransition({
     Key? key,
     required this.controller,
     required this.child,

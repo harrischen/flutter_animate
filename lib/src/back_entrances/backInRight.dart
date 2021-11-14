@@ -11,23 +11,25 @@ class BackInRight extends StatefulWidget {
         color: Colors.lightBlue,
       ),
     ),
-    this.curve = Curves.easeInOut,
     this.duration = const Duration(milliseconds: 1000),
     this.delay = const Duration(milliseconds: 1000),
+    this.curve = Curves.easeInOut,
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
-  final Curve curve;
   final Duration duration;
   final Duration delay;
+  final Curve curve;
   final VoidCallback? completed;
-
+  final AnimationController? controller;
   @override
   _BackInRightState createState() => _BackInRightState();
 }
 
-class _BackInRightState extends State<BackInRight> with SingleTickerProviderStateMixin {
+class _BackInRightState extends State<BackInRight>
+    with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> translateX;
   late Animation<double> scale;
@@ -36,13 +38,14 @@ class _BackInRightState extends State<BackInRight> with SingleTickerProviderStat
   @override
   void initState() {
     super.initState();
-
-    controller = AnimationController(duration: widget.duration, vsync: this)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed && widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
 
     translateX = TweenSequence([
       TweenSequenceItem(
@@ -83,9 +86,9 @@ class _BackInRightState extends State<BackInRight> with SingleTickerProviderStat
       TweenSequenceItem(tween: Tween(begin: 0.7, end: 1.0), weight: 10),
     ]).animate(controller);
 
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () => controller.forward());
+    }
   }
 
   @override
@@ -96,7 +99,7 @@ class _BackInRightState extends State<BackInRight> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    return BackInRightGrowTransition(
+    return _GrowTransition(
       child: widget.child,
       controller: controller,
       translateX: translateX,
@@ -106,8 +109,8 @@ class _BackInRightState extends State<BackInRight> with SingleTickerProviderStat
   }
 }
 
-class BackInRightGrowTransition extends StatelessWidget {
-  const BackInRightGrowTransition({
+class _GrowTransition extends StatelessWidget {
+  const _GrowTransition({
     Key? key,
     required this.child,
     required this.controller,
@@ -127,7 +130,8 @@ class BackInRightGrowTransition extends StatelessWidget {
     return AnimatedBuilder(
       animation: scale,
       builder: (context, child) {
-        final _scale = Matrix4.diagonal3Values(scale.value, scale.value, scale.value);
+        final _scale =
+            Matrix4.diagonal3Values(scale.value, scale.value, scale.value);
         final _offset = Matrix4.translationValues(translateX.value, 0.0, 0.0);
         return Transform(
           alignment: Alignment.center,

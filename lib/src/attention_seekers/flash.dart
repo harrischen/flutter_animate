@@ -13,13 +13,17 @@ class Flash extends StatefulWidget {
     ),
     this.duration = const Duration(milliseconds: 1000),
     this.delay = const Duration(milliseconds: 1000),
+    this.curve = Curves.ease,
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
   final Duration duration;
   final Duration delay;
+  final Curve curve;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   _FlashState createState() => _FlashState();
@@ -32,13 +36,14 @@ class _FlashState extends State<Flash> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(vsync: this, duration: widget.duration)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
 
     opacity = TweenSequence([
       TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.0), weight: 0.25),
@@ -47,9 +52,11 @@ class _FlashState extends State<Flash> with SingleTickerProviderStateMixin {
       TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.0), weight: 0.25),
     ]).animate(controller);
 
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () {
+        controller.forward();
+      });
+    }
   }
 
   @override
@@ -60,7 +67,7 @@ class _FlashState extends State<Flash> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return FlashGrowTransition(
+    return _GrowTransition(
       child: widget.child,
       controller: controller,
       opacity: opacity,
@@ -68,8 +75,8 @@ class _FlashState extends State<Flash> with SingleTickerProviderStateMixin {
   }
 }
 
-class FlashGrowTransition extends StatelessWidget {
-  const FlashGrowTransition({
+class _GrowTransition extends StatelessWidget {
+  const _GrowTransition({
     Key? key,
     required this.controller,
     required this.child,

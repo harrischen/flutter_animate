@@ -1,17 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// How to achieve zoomOut in animate.css
-/// @keyframes zoomOut {
-///   from {
-///     opacity: 0;
-///     transform: scale3d(0.3, 0.3, 0.3);
-///   }
-///
-///   50% {
-///     opacity: 1;
-///   }
-/// }
-
 class ZoomOut extends StatefulWidget {
   const ZoomOut({
     Key? key,
@@ -23,17 +11,19 @@ class ZoomOut extends StatefulWidget {
         color: Colors.lightBlue,
       ),
     ),
+    this.duration = const Duration(milliseconds: 1000),
+    this.delay = const Duration(milliseconds: 1000),
     this.curve = Curves.linear,
-    this.duration = const Duration(milliseconds: 500),
-    this.delay = const Duration(milliseconds: 0),
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
-  final Curve curve;
   final Duration duration;
   final Duration delay;
+  final Curve curve;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   _ZoomOutState createState() => _ZoomOutState();
@@ -48,31 +38,22 @@ class _ZoomOutState extends State<ZoomOut> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
 
-    controller = AnimationController(duration: widget.duration, vsync: this)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed && widget.completed is Function) {
-          widget.completed!();
-        }
-      });
     curve = CurvedAnimation(parent: controller, curve: widget.curve);
-
     scale = Tween<double>(begin: 1.0, end: 0.3).animate(curve);
     opacity = Tween<double>(begin: 1.0, end: 0.0).animate(curve);
 
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ZoomOutGrowTransition(
-      child: widget.child,
-      controller: controller,
-      scale: scale,
-      opacity: opacity,
-    );
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () => controller.forward());
+    }
   }
 
   @override
@@ -80,10 +61,20 @@ class _ZoomOutState extends State<ZoomOut> with SingleTickerProviderStateMixin {
     controller.dispose();
     super.dispose();
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return _GrowTransition(
+      child: widget.child,
+      controller: controller,
+      scale: scale,
+      opacity: opacity,
+    );
+  }
 }
 
-class ZoomOutGrowTransition extends StatelessWidget {
-  const ZoomOutGrowTransition({
+class _GrowTransition extends StatelessWidget {
+  const _GrowTransition({
     Key? key,
     required this.child,
     required this.controller,

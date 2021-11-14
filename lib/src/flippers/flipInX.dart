@@ -12,17 +12,19 @@ class FlipInX extends StatefulWidget {
         color: Colors.lightBlue,
       ),
     ),
-    this.curve = Curves.easeIn,
     this.duration = const Duration(milliseconds: 1000),
     this.delay = const Duration(milliseconds: 1000),
+    this.curve = Curves.easeIn,
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
-  final Curve curve;
   final Duration duration;
   final Duration delay;
+  final Curve curve;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   _FlipInXState createState() => _FlipInXState();
@@ -36,14 +38,14 @@ class _FlipInXState extends State<FlipInX> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
-    controller = AnimationController(duration: widget.duration, vsync: this)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
 
     rotate = TweenSequence([
       TweenSequenceItem(
@@ -67,9 +69,9 @@ class _FlipInXState extends State<FlipInX> with SingleTickerProviderStateMixin {
       curve: Interval(0, 0.60),
     ));
 
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () => controller.forward());
+    }
   }
 
   @override
@@ -80,7 +82,7 @@ class _FlipInXState extends State<FlipInX> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return FlipInXGrowTransition(
+    return _GrowTransition(
       child: widget.child,
       controller: controller,
       rotate: rotate,
@@ -89,8 +91,8 @@ class _FlipInXState extends State<FlipInX> with SingleTickerProviderStateMixin {
   }
 }
 
-class FlipInXGrowTransition extends StatelessWidget {
-  const FlipInXGrowTransition({
+class _GrowTransition extends StatelessWidget {
+  const _GrowTransition({
     Key? key,
     required this.child,
     required this.controller,

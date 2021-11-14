@@ -15,6 +15,7 @@ class SlideOutUp extends StatefulWidget {
     this.delay = const Duration(milliseconds: 1000),
     this.curve = Curves.ease,
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
@@ -22,6 +23,7 @@ class SlideOutUp extends StatefulWidget {
   final Duration delay;
   final Curve curve;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   _SlideOutUpState createState() => _SlideOutUpState();
@@ -36,32 +38,31 @@ class _SlideOutUpState extends State<SlideOutUp>
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(duration: widget.duration, vsync: this)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
-          widget.completed!();
-        }
-        if (status == AnimationStatus.completed) {
-          setState(() {
-            visible = false;
-          });
-        }
-        if (status == AnimationStatus.forward) {
-          setState(() {
-            visible = true;
-          });
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+      if (status == AnimationStatus.completed) {
+        setState(() => visible = false);
+      }
+      if (status == AnimationStatus.forward) {
+        setState(() => visible = true);
+      }
+    });
 
     offset = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: controller,
       curve: widget.curve,
     ));
 
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () {
+        controller.forward();
+      });
+    }
   }
 
   @override

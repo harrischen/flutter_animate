@@ -16,6 +16,7 @@ class Jello extends StatefulWidget {
     this.delay = const Duration(milliseconds: 1000),
     this.curve = Curves.linear,
     this.completed,
+    this.controller,
   }) : super(key: key);
 
   final Widget child;
@@ -23,6 +24,7 @@ class Jello extends StatefulWidget {
   final Duration delay;
   final Curve curve;
   final VoidCallback? completed;
+  final AnimationController? controller;
 
   @override
   _JelloState createState() => _JelloState();
@@ -35,13 +37,14 @@ class _JelloState extends State<Jello> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(vsync: this, duration: widget.duration)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed &&
-            widget.completed is Function) {
-          widget.completed!();
-        }
-      });
+    controller = (widget.controller is AnimationController
+        ? widget.controller
+        : AnimationController(vsync: this, duration: widget.duration))!;
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.completed is Function) {
+        widget.completed!();
+      }
+    });
 
     skew = TweenSequence([
       TweenSequenceItem(
@@ -78,9 +81,11 @@ class _JelloState extends State<Jello> with SingleTickerProviderStateMixin {
       ),
     ]).animate(CurvedAnimation(parent: controller, curve: widget.curve));
 
-    Future.delayed(widget.delay, () {
-      controller.forward();
-    });
+    if (!(widget.controller is AnimationController)) {
+      Future.delayed(widget.delay, () {
+        controller.forward();
+      });
+    }
   }
 
   @override
