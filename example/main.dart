@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:motion/motion.dart';
+import 'components.dart';
+import 'config.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,32 +14,33 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Animate Demo'),
-        ),
-        body: Center(
-          child: ParentWidget(),
+      home: SafeArea(
+        child: Scaffold(
+          appBar: AppBar(title: Text('Animate Demo')),
+          body: Layout(),
         ),
       ),
     );
   }
 }
 
-class ParentWidget extends StatefulWidget {
-  const ParentWidget({Key? key}) : super(key: key);
+class Layout extends StatefulWidget {
+  const Layout({Key? key}) : super(key: key);
 
   @override
-  _ParentWidgetState createState() => _ParentWidgetState();
+  State<Layout> createState() => _LayoutState();
 }
 
-class _ParentWidgetState extends State<ParentWidget> with TickerProviderStateMixin {
+class _LayoutState extends State<Layout> with TickerProviderStateMixin {
   late AnimationController _controller;
+  String animateName = '';
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(duration: Duration(seconds: 2), vsync: this);
+    final _duration = const Duration(milliseconds: 1000);
+    _controller = AnimationController(duration: _duration, vsync: this);
+    animateName = '';
   }
 
   @override
@@ -50,25 +52,35 @@ class _ParentWidgetState extends State<ParentWidget> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[
-        Hinge(
-          controller: _controller,
+      children: [
+        Expanded(
+          flex: 3,
+          child: Center(
+            child: GetMotionWidget(
+              title: animateName,
+              controller: _controller,
+            ),
+          ),
         ),
-        FloatingActionButton(
-          child: Text('start'),
-          onPressed: () {
-            if (_controller.isAnimating) {
-              _controller.stop(canceled: false);
-            } else {
-              _controller.forward();
-            }
+        Expanded(
+          flex: 2,
+          child: Menus(
+            callback: (title) {
+              setState(() => animateName = title);
 
-            if (_controller.isCompleted) {
-              _controller.reset();
-              _controller.forward();
-            }
-          },
-        )
+              if (_controller.isAnimating) {
+                _controller.stop(canceled: false);
+              } else {
+                _controller.forward();
+              }
+
+              if (_controller.isCompleted) {
+                _controller.reset();
+                _controller.forward();
+              }
+            },
+          ),
+        ),
       ],
     );
   }
