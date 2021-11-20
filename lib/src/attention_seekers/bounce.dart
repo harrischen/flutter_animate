@@ -11,9 +11,9 @@ class Bounce extends StatefulWidget {
         color: Colors.lightBlue,
       ),
     ),
-    this.duration = const Duration(milliseconds: 2000),
-    this.delay = const Duration(milliseconds: 1000),
-    this.curve = Curves.ease,
+    this.duration = const Duration(milliseconds: 1000),
+    this.delay = const Duration(milliseconds: 0),
+    this.curve = Curves.easeIn,
     this.completed,
     this.controller,
   }) : super(key: key);
@@ -46,103 +46,27 @@ class _BounceState extends State<Bounce> with SingleTickerProviderStateMixin {
       }
     });
 
-    translateY = TweenSequence<double>([
-      TweenSequenceItem(
-        tween: Tween(begin: 0.0, end: 0.0).chain(
-          CurveTween(curve: Cubic(0.215, 0.61, 0.355, 1)),
-        ),
-        weight: 20.0,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: 0.0, end: -30.0).chain(
-          CurveTween(curve: Cubic(0.755, 0.05, 0.855, 0.06)),
-        ),
-        weight: 20.0,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: -30.0, end: -30.0).chain(
-          CurveTween(curve: Cubic(0.755, 0.05, 0.855, 0.06)),
-        ),
-        weight: 3.0,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: -30.0, end: 0.0).chain(
-          CurveTween(curve: Cubic(0.215, 0.61, 0.355, 1)),
-        ),
-        weight: 10.0,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: 0.0, end: -15.0).chain(
-          CurveTween(curve: Cubic(0.755, 0.05, 0.855, 0.06)),
-        ),
-        weight: 17.0,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: -15.0, end: 0.0).chain(
-          CurveTween(curve: Cubic(0.215, 0.61, 0.355, 1)),
-        ),
-        weight: 10.0,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: 0.0, end: -4.0),
-        weight: 10.0,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: -4.0, end: 0.0).chain(
-          CurveTween(curve: Cubic(0.215, 0.61, 0.355, 1)),
-        ),
-        weight: 10.0,
-      ),
-    ]).animate(controller);
+    translateY = TweenSequence([
+      TweenSequenceItem(tween: ConstantTween(0.0), weight: 20.0),
+      TweenSequenceItem(tween: Tween(begin: 0.0, end: -30.0), weight: 20.0),
+      TweenSequenceItem(tween: ConstantTween(-30.0), weight: 3.0),
+      TweenSequenceItem(tween: Tween(begin: -30.0, end: 0.0), weight: 10.0),
+      TweenSequenceItem(tween: Tween(begin: 0.0, end: -15.0), weight: 17.0),
+      TweenSequenceItem(tween: Tween(begin: -15.0, end: 0.0), weight: 10.0),
+      TweenSequenceItem(tween: Tween(begin: 0.0, end: -4.0), weight: 10.0),
+      TweenSequenceItem(tween: Tween(begin: -4.0, end: 0.0), weight: 10.0),
+    ]).animate(CurvedAnimation(parent: controller, curve: widget.curve));
 
-    scaleY = TweenSequence<double>([
-      TweenSequenceItem(
-        tween: Tween(begin: 1.0, end: 1.0).chain(
-          CurveTween(curve: Cubic(0.215, 0.61, 0.355, 1)),
-        ),
-        weight: 20.0,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: 1.0, end: 1.1).chain(
-          CurveTween(curve: Cubic(0.755, 0.05, 0.855, 0.06)),
-        ),
-        weight: 20.0,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: 1.1, end: 1.1).chain(
-          CurveTween(curve: Cubic(0.755, 0.05, 0.855, 0.06)),
-        ),
-        weight: 3.0,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: 1.1, end: 1.0).chain(
-          CurveTween(curve: Cubic(0.215, 0.61, 0.355, 1)),
-        ),
-        weight: 10.0,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: 1.0, end: 1.05).chain(
-          CurveTween(curve: Cubic(0.755, 0.05, 0.855, 0.06)),
-        ),
-        weight: 17.0,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: 1.05, end: 0.95).chain(
-          CurveTween(curve: Cubic(0.215, 0.61, 0.355, 1)),
-        ),
-        weight: 10.0,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: 0.95, end: 1.02),
-        weight: 10.0,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: 1.02, end: 1.0).chain(
-          CurveTween(curve: Cubic(0.215, 0.61, 0.355, 1)),
-        ),
-        weight: 10.0,
-      ),
-    ]).animate(controller);
+    scaleY = TweenSequence([
+      TweenSequenceItem(tween: ConstantTween(1.0), weight: 20.0),
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.1), weight: 20.0),
+      TweenSequenceItem(tween: ConstantTween(1.1), weight: 3.0),
+      TweenSequenceItem(tween: Tween(begin: 1.1, end: 1.0), weight: 10.0),
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.05), weight: 17.0),
+      TweenSequenceItem(tween: Tween(begin: 1.05, end: 0.95), weight: 10.0),
+      TweenSequenceItem(tween: Tween(begin: 0.95, end: 1.02), weight: 10.0),
+      TweenSequenceItem(tween: Tween(begin: 1.02, end: 1.0), weight: 10.0),
+    ]).animate(CurvedAnimation(parent: controller, curve: widget.curve));
 
     if (!(widget.controller is AnimationController)) {
       Future.delayed(widget.delay, () {
@@ -187,12 +111,13 @@ class _GrowTransition extends StatelessWidget {
     return AnimatedBuilder(
       animation: controller,
       builder: (context, child) {
-        final _offset = Matrix4.translationValues(0.0, translateY.value, 0.0);
-        final _scale = Matrix4.diagonal3Values(1.0, scaleY.value, 1.0);
-        return Transform(
-          alignment: Alignment.bottomCenter,
-          transform: _offset..add(_scale),
-          child: child,
+        return Transform.translate(
+          offset: Offset(0.0, translateY.value),
+          child: Transform(
+            alignment: FractionalOffset.bottomCenter,
+            transform: Matrix4.diagonal3Values(1.0, scaleY.value, 1.0),
+            child: child,
+          ),
         );
       },
       child: child,
