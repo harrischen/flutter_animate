@@ -20,7 +20,7 @@ ZoomInDown();
 
 ```dart
 ZoomInDown(
-    completed: () => print('Animation has ended'),****
+    completed: () => print('Animation has ended'),
 )
 ```
 
