@@ -12,8 +12,9 @@ class Pulse extends StatefulWidget {
       ),
     ),
     this.duration = const Duration(milliseconds: 1000),
-    this.delay = const Duration(milliseconds: 1000),
-    this.curve = Curves.ease,
+    this.delay = const Duration(milliseconds: 0),
+    this.curve = Curves.easeInOut,
+    this.repeat = false,
     this.completed,
     this.controller,
   }) : super(key: key);
@@ -22,6 +23,7 @@ class Pulse extends StatefulWidget {
   final Duration duration;
   final Duration delay;
   final Curve curve;
+  final bool repeat;
   final VoidCallback? completed;
   final AnimationController? controller;
 
@@ -46,23 +48,16 @@ class _PulseState extends State<Pulse> with SingleTickerProviderStateMixin {
     });
 
     scale = TweenSequence([
-      TweenSequenceItem(
-        tween: Tween(begin: 1.0, end: 1.05).chain(
-          CurveTween(curve: Curves.easeInOut),
-        ),
-        weight: 0.5,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: 1.05, end: 1.0).chain(
-          CurveTween(curve: Curves.easeInOut),
-        ),
-        weight: 0.5,
-      ),
-    ]).animate(controller);
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.15), weight: 50.0),
+      TweenSequenceItem(tween: Tween(begin: 1.15, end: 1.0), weight: 50.0),
+    ]).animate(CurvedAnimation(parent: controller, curve: widget.curve));
 
     if (!(widget.controller is AnimationController)) {
       Future.delayed(widget.delay, () {
         controller.forward();
+        if (widget.repeat) {
+          controller.repeat();
+        }
       });
     }
   }
@@ -98,14 +93,12 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        return Transform.scale(
-          scale: scale.value,
-          child: child,
-        );
-      },
       child: child,
+      animation: controller,
+      builder: (context, child) => Transform.scale(
+        scale: scale.value,
+        child: child,
+      ),
     );
   }
 }

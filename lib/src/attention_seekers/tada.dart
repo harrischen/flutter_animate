@@ -13,8 +13,9 @@ class Tada extends StatefulWidget {
       ),
     ),
     this.duration = const Duration(milliseconds: 1000),
-    this.delay = const Duration(milliseconds: 1000),
-    this.curve = Curves.ease,
+    this.delay = const Duration(milliseconds: 0),
+    this.curve = Curves.linear,
+    this.repeat = false,
     this.completed,
     this.controller,
   }) : super(key: key);
@@ -23,6 +24,7 @@ class Tada extends StatefulWidget {
   final Duration duration;
   final Duration delay;
   final Curve curve;
+  final bool repeat;
   final VoidCallback? completed;
   final AnimationController? controller;
 
@@ -47,48 +49,33 @@ class _ShakeXState extends State<Tada> with SingleTickerProviderStateMixin {
       }
     });
 
-    rotateZ = TweenSequence<double>([
-      TweenSequenceItem<double>(
-          tween: Tween(begin: 0.0, end: -3.0), weight: 10.0),
-      TweenSequenceItem<double>(tween: ConstantTween(-3.0), weight: 10.0),
-      TweenSequenceItem<double>(
-          tween: Tween(begin: -3.0, end: 3.0), weight: 10.0),
-      TweenSequenceItem<double>(
-          tween: Tween(begin: 3.0, end: -3.0), weight: 10.0),
-      TweenSequenceItem<double>(
-          tween: Tween(begin: -3.0, end: 3.0), weight: 10.0),
-      TweenSequenceItem<double>(
-          tween: Tween(begin: 3.0, end: -3.0), weight: 10.0),
-      TweenSequenceItem<double>(
-          tween: Tween(begin: -3.0, end: 3.0), weight: 10.0),
-      TweenSequenceItem<double>(
-          tween: Tween(begin: 3.0, end: -3.0), weight: 10.0),
-      TweenSequenceItem<double>(
-          tween: Tween(begin: -3.0, end: 3.0), weight: 10.0),
-      TweenSequenceItem<double>(
-          tween: Tween(begin: 3.0, end: 0.0), weight: 10.0),
-    ]).animate(CurvedAnimation(
-      parent: controller,
-      curve: widget.curve,
-    ));
+    rotateZ = TweenSequence([
+      TweenSequenceItem(tween: Tween(begin: 0.0, end: -3.0), weight: 10.0),
+      TweenSequenceItem(tween: ConstantTween(-3.0), weight: 10.0),
+      TweenSequenceItem(tween: Tween(begin: -3.0, end: 3.0), weight: 10.0),
+      TweenSequenceItem(tween: Tween(begin: 3.0, end: -3.0), weight: 10.0),
+      TweenSequenceItem(tween: Tween(begin: -3.0, end: 3.0), weight: 10.0),
+      TweenSequenceItem(tween: Tween(begin: 3.0, end: -3.0), weight: 10.0),
+      TweenSequenceItem(tween: Tween(begin: -3.0, end: 3.0), weight: 10.0),
+      TweenSequenceItem(tween: Tween(begin: 3.0, end: -3.0), weight: 10.0),
+      TweenSequenceItem(tween: Tween(begin: -3.0, end: 3.0), weight: 10.0),
+      TweenSequenceItem(tween: Tween(begin: 3.0, end: 0.0), weight: 10.0),
+    ]).animate(CurvedAnimation(parent: controller, curve: widget.curve));
 
-    scale = TweenSequence<double>([
-      TweenSequenceItem<double>(
-          tween: Tween(begin: 1.0, end: 0.9), weight: 10.0),
-      TweenSequenceItem<double>(tween: ConstantTween(0.9), weight: 10.0),
-      TweenSequenceItem<double>(
-          tween: Tween(begin: 0.9, end: 1.1), weight: 10.0),
-      TweenSequenceItem<double>(tween: ConstantTween(1.1), weight: 60.0),
-      TweenSequenceItem<double>(
-          tween: Tween(begin: 1.1, end: 1.0), weight: 10.0),
-    ]).animate(CurvedAnimation(
-      parent: controller,
-      curve: widget.curve,
-    ));
+    scale = TweenSequence([
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.9), weight: 10.0),
+      TweenSequenceItem(tween: ConstantTween(0.9), weight: 10.0),
+      TweenSequenceItem(tween: Tween(begin: 0.9, end: 1.1), weight: 10.0),
+      TweenSequenceItem(tween: ConstantTween(1.1), weight: 60.0),
+      TweenSequenceItem(tween: Tween(begin: 1.1, end: 1.0), weight: 10.0),
+    ]).animate(CurvedAnimation(parent: controller, curve: widget.curve));
 
     if (!(widget.controller is AnimationController)) {
       Future.delayed(widget.delay, () {
         controller.forward();
+        if (widget.repeat) {
+          controller.repeat();
+        }
       });
     }
   }
@@ -127,18 +114,15 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        final _rotate = Matrix4.rotationZ(rotateZ.value * pi / 180);
-        final _scale =
-            Matrix4.diagonal3Values(scale.value, scale.value, scale.value);
-        return Transform(
-          alignment: Alignment.center,
-          transform: _rotate..add(_scale),
-          child: child,
-        );
-      },
       child: child,
+      animation: controller,
+      builder: (context, child) => Transform.rotate(
+        angle: rotateZ.value * pi / 180,
+        child: Transform.scale(
+          scale: scale.value,
+          child: child,
+        ),
+      ),
     );
   }
 }

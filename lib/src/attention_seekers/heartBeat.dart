@@ -12,7 +12,7 @@ class HeartBeat extends StatefulWidget {
       ),
     ),
     this.duration = const Duration(milliseconds: 1300),
-    this.delay = const Duration(milliseconds: 1000),
+    this.delay = const Duration(milliseconds: 0),
     this.curve = Curves.easeInOut,
     this.completed,
     this.controller,
@@ -46,43 +46,16 @@ class _HeartBeatState extends State<HeartBeat>
       }
     });
 
-    scale = TweenSequence<double>([
-      TweenSequenceItem<double>(
-        tween: Tween<double>(begin: 1.0, end: 1.3).chain(
-          CurveTween(curve: widget.curve),
-        ),
-        weight: 14.0,
-      ),
-      TweenSequenceItem<double>(
-        tween: Tween<double>(begin: 1.3, end: 1.0).chain(
-          CurveTween(curve: widget.curve),
-        ),
-        weight: 14.0,
-      ),
-      TweenSequenceItem<double>(
-        tween: Tween<double>(begin: 1.0, end: 1.3).chain(
-          CurveTween(curve: widget.curve),
-        ),
-        weight: 14.0,
-      ),
-      TweenSequenceItem<double>(
-        tween: Tween<double>(begin: 1.3, end: 1.0).chain(
-          CurveTween(curve: widget.curve),
-        ),
-        weight: 28.0,
-      ),
-      TweenSequenceItem<double>(
-        tween: Tween<double>(begin: 1.0, end: 1.0).chain(
-          CurveTween(curve: widget.curve),
-        ),
-        weight: 30.0,
-      ),
-    ]).animate(controller);
+    scale = TweenSequence([
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.3), weight: 14.0),
+      TweenSequenceItem(tween: Tween(begin: 1.3, end: 1.0), weight: 14.0),
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.3), weight: 14.0),
+      TweenSequenceItem(tween: Tween(begin: 1.3, end: 1.0), weight: 28.0),
+      TweenSequenceItem(tween: ConstantTween(1.0), weight: 30.0),
+    ]).animate(CurvedAnimation(parent: controller, curve: widget.curve));
 
     if (!(widget.controller is AnimationController)) {
-      Future.delayed(widget.delay, () {
-        controller.forward();
-      });
+      Future.delayed(widget.delay, () => controller.forward());
     }
   }
 
@@ -117,14 +90,12 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        return Transform.scale(
-          scale: scale.value,
-          child: child,
-        );
-      },
       child: child,
+      animation: controller,
+      builder: (context, child) => Transform.scale(
+        scale: scale.value,
+        child: child,
+      ),
     );
   }
 }

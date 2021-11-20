@@ -13,8 +13,8 @@ class Jello extends StatefulWidget {
       ),
     ),
     this.duration = const Duration(milliseconds: 1000),
-    this.delay = const Duration(milliseconds: 1000),
-    this.curve = Curves.linear,
+    this.delay = const Duration(milliseconds: 0),
+    this.curve = Curves.ease,
     this.completed,
     this.controller,
   }) : super(key: key);
@@ -53,38 +53,36 @@ class _JelloState extends State<Jello> with SingleTickerProviderStateMixin {
       ),
       TweenSequenceItem(
         tween: Tween(begin: -12.5, end: 6.25),
-        weight: 12.5,
+        weight: 11.1,
       ),
       TweenSequenceItem(
         tween: Tween(begin: 6.25, end: -3.125),
-        weight: 12.5,
+        weight: 11.1,
       ),
       TweenSequenceItem(
         tween: Tween(begin: -3.125, end: 1.5625),
-        weight: 12.5,
+        weight: 11.1,
       ),
       TweenSequenceItem(
         tween: Tween(begin: 1.5625, end: -0.78125),
-        weight: 12.5,
+        weight: 11.1,
       ),
       TweenSequenceItem(
         tween: Tween(begin: -0.78125, end: 0.390625),
-        weight: 12.5,
+        weight: 11.1,
       ),
       TweenSequenceItem(
         tween: Tween(begin: 0.390625, end: -0.1953125),
-        weight: 12.5,
+        weight: 11.1,
       ),
       TweenSequenceItem(
         tween: Tween(begin: -0.1953125, end: 0.0),
-        weight: 12.5,
+        weight: 11.2,
       ),
     ]).animate(CurvedAnimation(parent: controller, curve: widget.curve));
 
     if (!(widget.controller is AnimationController)) {
-      Future.delayed(widget.delay, () {
-        controller.forward();
-      });
+      Future.delayed(widget.delay, () => controller.forward());
     }
   }
 
@@ -119,16 +117,13 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        final _deg = skew.value * pi / 180;
-        return Transform(
-          alignment: Alignment.center,
-          transform: Matrix4.skew(_deg, _deg),
-          child: child,
-        );
-      },
       child: child,
+      animation: controller,
+      builder: (context, child) => Transform(
+        alignment: FractionalOffset.center,
+        transform: Matrix4.skew(skew.value * pi / 180, skew.value * pi / 180),
+        child: child,
+      ),
     );
   }
 }

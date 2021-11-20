@@ -13,8 +13,8 @@ class HeadShake extends StatefulWidget {
       ),
     ),
     this.duration = const Duration(milliseconds: 1000),
-    this.delay = const Duration(milliseconds: 1000),
-    this.curve = Curves.ease,
+    this.delay = const Duration(milliseconds: 0),
+    this.curve = Curves.easeInOut,
     this.completed,
     this.controller,
   }) : super(key: key);
@@ -48,44 +48,26 @@ class _HeadShakeState extends State<HeadShake>
       }
     });
 
-    translateX = TweenSequence<double>([
-      TweenSequenceItem<double>(
-          tween: Tween(begin: 0.0, end: -6.0), weight: 6.5),
-      TweenSequenceItem<double>(
-          tween: Tween(begin: -6.0, end: 5.0), weight: 12.0),
-      TweenSequenceItem<double>(
-          tween: Tween(begin: 5.0, end: -3.0), weight: 13.0),
-      TweenSequenceItem<double>(
-          tween: Tween(begin: -3.0, end: 2.0), weight: 12.0),
-      TweenSequenceItem<double>(
-          tween: Tween(begin: 2.0, end: 0.0), weight: 6.5),
-      TweenSequenceItem<double>(tween: ConstantTween(0.0), weight: 50.0),
-    ]).animate(CurvedAnimation(
-      parent: controller,
-      curve: Curves.easeInOut,
-    ));
+    translateX = TweenSequence([
+      TweenSequenceItem(tween: Tween(begin: 0.0, end: -6.0), weight: 6.5),
+      TweenSequenceItem(tween: Tween(begin: -6.0, end: 5.0), weight: 12.0),
+      TweenSequenceItem(tween: Tween(begin: 5.0, end: -3.0), weight: 13.0),
+      TweenSequenceItem(tween: Tween(begin: -3.0, end: 2.0), weight: 12.0),
+      TweenSequenceItem(tween: Tween(begin: 2.0, end: 0.0), weight: 6.5),
+      TweenSequenceItem(tween: ConstantTween(0.0), weight: 50.0),
+    ]).animate(CurvedAnimation(parent: controller, curve: widget.curve));
 
-    rotateY = TweenSequence<double>([
-      TweenSequenceItem<double>(
-          tween: Tween(begin: 0.0, end: -9.0), weight: 6.5),
-      TweenSequenceItem<double>(
-          tween: Tween(begin: -9.0, end: 7.0), weight: 12.0),
-      TweenSequenceItem<double>(
-          tween: Tween(begin: 7.0, end: -5.0), weight: 13.0),
-      TweenSequenceItem<double>(
-          tween: Tween(begin: -5.0, end: 3.0), weight: 12.0),
-      TweenSequenceItem<double>(
-          tween: Tween(begin: 3.0, end: 0.0), weight: 6.5),
-      TweenSequenceItem<double>(tween: ConstantTween(0.0), weight: 50.0),
-    ]).animate(CurvedAnimation(
-      parent: controller,
-      curve: Curves.easeInOut,
-    ));
+    rotateY = TweenSequence([
+      TweenSequenceItem(tween: Tween(begin: 0.0, end: -9.0), weight: 6.5),
+      TweenSequenceItem(tween: Tween(begin: -9.0, end: 7.0), weight: 12.0),
+      TweenSequenceItem(tween: Tween(begin: 7.0, end: -5.0), weight: 13.0),
+      TweenSequenceItem(tween: Tween(begin: -5.0, end: 3.0), weight: 12.0),
+      TweenSequenceItem(tween: Tween(begin: 3.0, end: 0.0), weight: 6.5),
+      TweenSequenceItem(tween: ConstantTween(0.0), weight: 50.0),
+    ]).animate(CurvedAnimation(parent: controller, curve: widget.curve));
 
     if (!(widget.controller is AnimationController)) {
-      Future.delayed(widget.delay, () {
-        controller.forward();
-      });
+      Future.delayed(widget.delay, () => controller.forward());
     }
   }
 
@@ -123,16 +105,16 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        final _rotate = Matrix4.rotationZ(rotateY.value * pi / 180);
-        final _offset = Matrix4.translationValues(translateX.value, 0.0, 0.0);
-        return Transform(
-          transform: _offset..add(_rotate),
-          child: child,
-        );
-      },
       child: child,
+      animation: controller,
+      builder: (context, child) => Transform.translate(
+        offset: Offset(translateX.value, 0.0),
+        child: Transform(
+          alignment: FractionalOffset.center,
+          transform: Matrix4.rotationY(rotateY.value * pi / 180),
+          child: child,
+        ),
+      ),
     );
   }
 }
