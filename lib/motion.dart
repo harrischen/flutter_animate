@@ -91,6 +91,3 @@ export 'package:motion/src/zooming_exits/zoomOutDown.dart';
 export 'package:motion/src/zooming_exits/zoomOutLeft.dart';
 export 'package:motion/src/zooming_exits/zoomOutRight.dart';
 export 'package:motion/src/zooming_exits/zoomOutUp.dart';
-
-///  Author: harrischen
-///  Version: 0.0.1

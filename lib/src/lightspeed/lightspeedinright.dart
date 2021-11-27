@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:math' show pi;
 import 'package:flutter/material.dart';
 
 class LightSpeedInRight extends StatefulWidget {
