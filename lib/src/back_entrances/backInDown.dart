@@ -12,7 +12,7 @@ class BackInDown extends StatefulWidget {
       ),
     ),
     this.duration = const Duration(milliseconds: 1000),
-    this.delay = const Duration(milliseconds: 1000),
+    this.delay = const Duration(milliseconds: 0),
     this.curve = Curves.easeInOut,
     this.completed,
     this.controller,
@@ -55,9 +55,7 @@ class _BackInDownState extends State<BackInDown>
         ),
         weight: 85,
       ),
-      // pause for a while
       TweenSequenceItem(tween: ConstantTween(0.0), weight: 5),
-      // continue to run to the end
       TweenSequenceItem(tween: ConstantTween(0.0), weight: 10),
     ]).animate(controller);
 
@@ -68,9 +66,7 @@ class _BackInDownState extends State<BackInDown>
         ),
         weight: 85,
       ),
-      // pause for a while
       TweenSequenceItem(tween: ConstantTween(0.7), weight: 5),
-      // continue to run to the end
       TweenSequenceItem(tween: Tween(begin: 0.7, end: 1.0), weight: 10),
     ]).animate(controller);
 
@@ -129,21 +125,19 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: scale,
-      builder: (context, child) {
-        final _scale =
-            Matrix4.diagonal3Values(scale.value, scale.value, scale.value);
-        final _offset = Matrix4.translationValues(0.0, translateY.value, 0.0);
-        return Transform(
-          alignment: Alignment.center,
-          transform: _scale..add(_offset),
+      child: child,
+      animation: controller,
+      builder: (context, child) => Transform.translate(
+        offset: Offset(0.0, translateY.value),
+        child: Transform.scale(
+          alignment: FractionalOffset.center,
+          scale: scale.value,
           child: Opacity(
             opacity: opacity.value,
             child: child,
           ),
-        );
-      },
-      child: child,
+        ),
+      ),
     );
   }
 }

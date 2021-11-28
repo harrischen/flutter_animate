@@ -188,7 +188,7 @@ class GetMotionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget _widget = Wobble();
+    Widget _widget = BackInDown();
     switch (this.title) {
       case "bounce":
         _widget = Bounce();
