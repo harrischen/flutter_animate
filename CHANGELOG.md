@@ -1,3 +1,3 @@
-#### [0.0.1] - Basic functionality.
+## 0.0.1
 
-Initialize the project infrastructure and directory structure
+* TODO: Describe initial release.
