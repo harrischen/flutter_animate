@@ -13,7 +13,7 @@ class Hinge extends StatefulWidget {
       ),
     ),
     this.duration = const Duration(milliseconds: 2000),
-    this.delay = const Duration(milliseconds: 1000),
+    this.delay = const Duration(milliseconds: 0),
     this.curve = Curves.ease,
     this.completed,
     this.controller,

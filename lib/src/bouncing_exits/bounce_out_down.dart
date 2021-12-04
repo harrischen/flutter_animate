@@ -12,7 +12,7 @@ class BounceOutDown extends StatefulWidget {
       ),
     ),
     this.duration = const Duration(milliseconds: 1000),
-    this.delay = const Duration(milliseconds: 1000),
+    this.delay = const Duration(milliseconds: 0),
     this.curve = Curves.easeOut,
     this.completed,
     this.controller,

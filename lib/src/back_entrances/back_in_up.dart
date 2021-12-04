@@ -12,7 +12,7 @@ class BackInUp extends StatefulWidget {
       ),
     ),
     this.duration = const Duration(milliseconds: 1000),
-    this.delay = const Duration(milliseconds: 1000),
+    this.delay = const Duration(milliseconds: 0),
     this.curve = Curves.easeInOut,
     this.completed,
     this.controller,

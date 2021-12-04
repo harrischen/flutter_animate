@@ -14,7 +14,7 @@ class RotateOutDownLeft extends StatefulWidget {
     ),
     this.curve = Curves.ease,
     this.duration = const Duration(milliseconds: 1000),
-    this.delay = const Duration(milliseconds: 1000),
+    this.delay = const Duration(milliseconds: 0),
     this.completed,
     this.controller,
   }) : super(key: key);

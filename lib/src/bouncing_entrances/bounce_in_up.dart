@@ -12,7 +12,7 @@ class BounceInUp extends StatefulWidget {
       ),
     ),
     this.duration = const Duration(milliseconds: 1000),
-    this.delay = const Duration(milliseconds: 1000),
+    this.delay = const Duration(milliseconds: 0),
     this.curve = const Cubic(0.215, 0.61, 0.355, 1),
     this.completed,
     this.controller,
