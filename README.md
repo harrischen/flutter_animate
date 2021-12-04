@@ -12,7 +12,8 @@ This project is my personal learning project (if successful, it will be integrat
 
 ## How To Use
 
-https://github.com/harrischen/resource/blob/main/demo_flutter_animate_simple.mov
+https://user-images.githubusercontent.com/8149304/144707098-bcb0f8d4-c9cd-4d3e-b2d0-a16d9ef17571.mov
+
 
 ### install package
 ```yaml
