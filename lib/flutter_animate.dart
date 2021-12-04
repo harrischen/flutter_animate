@@ -1,4 +1,4 @@
-library motion;
+library flutter_animate;
 
 export 'src/attention_seekers/bounce.dart';
 export 'src/attention_seekers/flash.dart';

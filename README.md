@@ -12,9 +12,18 @@ This project is my personal learning project (if successful, it will be integrat
 
 ## How To Use
 
+### install package
+```yaml
+flutter_animate:
+  git:
+    url: https://github.com/harrischen/flutter_animate.git
+    ref: main
+```
+
+### use package
 ```dart
 import 'package:flutter/material.dart';
-import 'package:motion/motion.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 void main() {
   runApp(const MyApp());
