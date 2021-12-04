@@ -12,16 +12,101 @@ This project is my personal learning project (if successful, it will be integrat
 
 ## How To Use
 
-### default
 ```dart
-ZoomInDown();
-```
-### completed
+import 'package:flutter/material.dart';
+import 'package:motion/motion.dart';
 
-```dart
-ZoomInDown(
-    completed: () => print('Animation has ended'),
-)
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  final String title;
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  bool isAnimate = false;
+
+  void _changeToEnd() => setState(() => isAnimate = true);
+  void _changeToStart() => setState(() => isAnimate = false);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(widget.title)),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 160.0,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: isAnimate
+                        ? Flip(
+                            child: const DemoIcon(),
+                            completed: _changeToStart,
+                          )
+                        : const DemoIcon(),
+                  ),
+                  Expanded(
+                    child: isAnimate
+                        ? FlipInX(
+                            child: const DemoIcon(),
+                            completed: _changeToStart,
+                          )
+                        : const DemoIcon(),
+                  ),
+                  Expanded(
+                    child: isAnimate
+                        ? FlipInY(
+                            child: const DemoIcon(),
+                            completed: _changeToStart,
+                          )
+                        : const DemoIcon(),
+                  )
+                ],
+              ),
+            ),
+            ElevatedButton(
+              child: Text(isAnimate ? 'In Animation' : 'Play'),
+              onPressed: _changeToEnd,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DemoIcon extends StatelessWidget {
+  const DemoIcon({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Icon(
+      Icons.adb_rounded,
+      size: 56.0,
+    );
+  }
+}
 ```
 
 
