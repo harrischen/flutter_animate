@@ -51,13 +51,13 @@ class _ZoomOutLeftState extends State<ZoomOutLeft>
     opacity = TweenSequence<double>(<TweenSequenceItem<double>>[
       TweenSequenceItem(
         tween: Tween<double>(begin: 1.0, end: 1.0).chain(CurveTween(
-          curve: Cubic(0.55, 0.055, 0.675, 0.19),
+          curve: const Cubic(0.55, 0.055, 0.675, 0.19),
         )),
         weight: 40.0,
       ),
       TweenSequenceItem(
         tween: Tween<double>(begin: 1.0, end: 0.0).chain(CurveTween(
-          curve: Cubic(0.175, 0.885, 0.32, 1),
+          curve: const Cubic(0.175, 0.885, 0.32, 1),
         )),
         weight: 60.0,
       ),
@@ -66,13 +66,13 @@ class _ZoomOutLeftState extends State<ZoomOutLeft>
     scale = TweenSequence<double>(<TweenSequenceItem<double>>[
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: 1.0, end: 0.475).chain(CurveTween(
-          curve: Cubic(0.55, 0.055, 0.675, 0.19),
+          curve: const Cubic(0.55, 0.055, 0.675, 0.19),
         )),
         weight: 40.0,
       ),
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: 0.475, end: 0.1).chain(CurveTween(
-          curve: Cubic(0.175, 0.885, 0.32, 1),
+          curve: const Cubic(0.175, 0.885, 0.32, 1),
         )),
         weight: 60.0,
       ),
@@ -81,19 +81,19 @@ class _ZoomOutLeftState extends State<ZoomOutLeft>
     offset = TweenSequence<double>(<TweenSequenceItem<double>>[
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: 0, end: 42).chain(CurveTween(
-          curve: Cubic(0.55, 0.055, 0.675, 0.19),
+          curve: const Cubic(0.55, 0.055, 0.675, 0.19),
         )),
         weight: 40.0,
       ),
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: 42, end: -1000).chain(CurveTween(
-          curve: Cubic(0.175, 0.885, 0.32, 1),
+          curve: const Cubic(0.175, 0.885, 0.32, 1),
         )),
         weight: 60.0,
       ),
     ]).animate(controller);
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () => controller.forward());
     }
   }
@@ -135,11 +135,12 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
+      child: child,
       animation: controller,
       builder: (context, child) {
+        final _scaleVal = scale.value;
         final _offset = Matrix4.translationValues(offset.value, 0.0, 0.0);
-        final _scale =
-            Matrix4.diagonal3Values(scale.value, scale.value, scale.value);
+        final _scale = Matrix4.diagonal3Values(_scaleVal, _scaleVal, _scaleVal);
         return Transform(
           alignment: Alignment.centerLeft,
           transform: _offset..add(_scale),
@@ -149,7 +150,6 @@ class _GrowTransition extends StatelessWidget {
           ),
         );
       },
-      child: child,
     );
   }
 }

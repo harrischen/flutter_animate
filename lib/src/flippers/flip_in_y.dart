@@ -66,10 +66,10 @@ class _FlipInYState extends State<FlipInY> with SingleTickerProviderStateMixin {
 
     opacity = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: controller,
-      curve: Interval(0, 0.60),
+      curve: const Interval(0, 0.60),
     ));
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () => controller.forward());
     }
   }
@@ -108,20 +108,18 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        return Transform(
-          alignment: FractionalOffset.center,
-          transform: Matrix4.identity()
-            ..setEntry(3, 2, -0.004)
-            ..rotateY(rotate.value * pi / 180),
-          child: Opacity(
-            opacity: opacity.value,
-            child: child,
-          ),
-        );
-      },
       child: child,
+      animation: controller,
+      builder: (context, child) => Transform(
+        alignment: FractionalOffset.center,
+        transform: Matrix4.identity()
+          ..setEntry(3, 2, -0.004)
+          ..rotateY(rotate.value * pi / 180),
+        child: Opacity(
+          opacity: opacity.value,
+          child: child,
+        ),
+      ),
     );
   }
 }

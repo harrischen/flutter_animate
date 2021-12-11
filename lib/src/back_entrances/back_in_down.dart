@@ -83,7 +83,7 @@ class _BackInDownState extends State<BackInDown>
       TweenSequenceItem(tween: Tween(begin: 0.7, end: 1.0), weight: 10),
     ]).animate(controller);
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () => controller.forward());
     }
   }
@@ -133,8 +133,8 @@ class _GrowTransition extends StatelessWidget {
           alignment: FractionalOffset.center,
           scale: scale.value,
           child: Opacity(
-            opacity: opacity.value,
             child: child,
+            opacity: opacity.value,
           ),
         ),
       ),

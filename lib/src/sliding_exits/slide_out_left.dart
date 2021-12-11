@@ -62,7 +62,7 @@ class _SlideOutLeftState extends State<SlideOutLeft>
       curve: widget.curve,
     ));
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () {
         controller.forward();
       });
@@ -103,17 +103,15 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        return Visibility(
-          visible: visible,
-          child: FractionalTranslation(
-            translation: Offset(-offset.value, 0.0),
-            child: child,
-          ),
-        );
-      },
       child: child,
+      animation: controller,
+      builder: (context, child) => Visibility(
+        visible: visible,
+        child: FractionalTranslation(
+          translation: Offset(-offset.value, 0.0),
+          child: child,
+        ),
+      ),
     );
   }
 }

@@ -56,7 +56,7 @@ class _ShakeXState extends State<Swing> with SingleTickerProviderStateMixin {
       TweenSequenceItem(tween: Tween(begin: -5.0, end: 0.0), weight: 20.0),
     ]).animate(CurvedAnimation(parent: controller, curve: widget.curve));
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () {
         controller.forward();
         if (widget.repeat) {
@@ -100,9 +100,9 @@ class _GrowTransition extends StatelessWidget {
       child: child,
       animation: controller,
       builder: (context, child) => Transform(
+        child: child,
         alignment: FractionalOffset.topCenter,
         transform: Matrix4.rotationZ(rotateZ.value * pi / 180),
-        child: child,
       ),
     );
   }

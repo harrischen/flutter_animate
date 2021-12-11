@@ -26,10 +26,10 @@ class BounceIn extends StatefulWidget {
   final AnimationController? controller;
 
   @override
-  BbounceInState createState() => BbounceInState();
+  BounceInState createState() => BounceInState();
 }
 
-class BbounceInState extends State<BounceIn>
+class BounceInState extends State<BounceIn>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> scale;
@@ -62,10 +62,10 @@ class BbounceInState extends State<BounceIn>
 
     opacity = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: controller,
-      curve: Interval(0, 0.60),
+      curve: const Interval(0, 0.60),
     ));
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () => controller.forward());
     }
   }
@@ -104,18 +104,16 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: scale,
-      builder: (context, child) {
-        return Transform.scale(
-          alignment: Alignment.center,
-          scale: scale.value,
-          child: Opacity(
-            opacity: opacity.value,
-            child: child,
-          ),
-        );
-      },
       child: child,
+      animation: scale,
+      builder: (context, child) => Transform.scale(
+        alignment: Alignment.center,
+        scale: scale.value,
+        child: Opacity(
+          opacity: opacity.value,
+          child: child,
+        ),
+      ),
     );
   }
 }

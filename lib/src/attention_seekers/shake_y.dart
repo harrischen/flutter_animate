@@ -60,7 +60,7 @@ class _ShakeXState extends State<ShakeY> with SingleTickerProviderStateMixin {
       TweenSequenceItem(tween: Tween(begin: -10.0, end: 0.0), weight: 10.0),
     ]).animate(CurvedAnimation(parent: controller, curve: widget.curve));
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () {
         controller.forward();
         if (widget.repeat) {
@@ -104,8 +104,8 @@ class _GrowTransition extends StatelessWidget {
       child: child,
       animation: controller,
       builder: (context, child) => Transform(
-        transform: Matrix4.translationValues(0.0, translateY.value, 0.0),
         child: child,
+        transform: Matrix4.translationValues(0.0, translateY.value, 0.0),
       ),
     );
   }

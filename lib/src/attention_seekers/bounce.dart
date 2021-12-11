@@ -68,7 +68,7 @@ class _BounceState extends State<Bounce> with SingleTickerProviderStateMixin {
       TweenSequenceItem(tween: Tween(begin: 1.02, end: 1.0), weight: 10.0),
     ]).animate(CurvedAnimation(parent: controller, curve: widget.curve));
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () {
         controller.forward();
       });
@@ -111,16 +111,14 @@ class _GrowTransition extends StatelessWidget {
     return AnimatedBuilder(
       child: child,
       animation: controller,
-      builder: (context, child) {
-        return Transform.translate(
-          offset: Offset(0.0, translateY.value),
-          child: Transform(
-            alignment: FractionalOffset.bottomCenter,
-            transform: Matrix4.diagonal3Values(1.0, scaleY.value, 1.0),
-            child: child,
-          ),
-        );
-      },
+      builder: (context, child) => Transform.translate(
+        offset: Offset(0.0, translateY.value),
+        child: Transform(
+          child: child,
+          alignment: FractionalOffset.bottomCenter,
+          transform: Matrix4.diagonal3Values(1.0, scaleY.value, 1.0),
+        ),
+      ),
     );
   }
 }

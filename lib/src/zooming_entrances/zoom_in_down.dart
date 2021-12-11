@@ -51,13 +51,13 @@ class _ZoomInDownState extends State<ZoomInDown>
     opacity = TweenSequence<double>(<TweenSequenceItem<double>>[
       TweenSequenceItem(
         tween: Tween<double>(begin: 0.0, end: 1.0).chain(CurveTween(
-          curve: Cubic(0.55, 0.055, 0.675, 0.19),
+          curve: const Cubic(0.55, 0.055, 0.675, 0.19),
         )),
         weight: 60,
       ),
       TweenSequenceItem(
         tween: Tween<double>(begin: 1.0, end: 1.0).chain(CurveTween(
-          curve: Cubic(0.175, 0.885, 0.32, 1),
+          curve: const Cubic(0.175, 0.885, 0.32, 1),
         )),
         weight: 40,
       ),
@@ -66,13 +66,13 @@ class _ZoomInDownState extends State<ZoomInDown>
     scale = TweenSequence<double>(<TweenSequenceItem<double>>[
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: 0.1, end: 0.475).chain(CurveTween(
-          curve: Cubic(0.55, 0.055, 0.675, 0.19),
+          curve: const Cubic(0.55, 0.055, 0.675, 0.19),
         )),
         weight: 60,
       ),
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: 0.475, end: 1.0).chain(CurveTween(
-          curve: Cubic(0.175, 0.885, 0.32, 1),
+          curve: const Cubic(0.175, 0.885, 0.32, 1),
         )),
         weight: 40,
       ),
@@ -81,19 +81,19 @@ class _ZoomInDownState extends State<ZoomInDown>
     offset = TweenSequence<double>(<TweenSequenceItem<double>>[
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: -1000, end: 60).chain(CurveTween(
-          curve: Cubic(0.55, 0.055, 0.675, 0.19),
+          curve: const Cubic(0.55, 0.055, 0.675, 0.19),
         )),
         weight: 60,
       ),
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: 60, end: 0).chain(CurveTween(
-          curve: Cubic(0.175, 0.885, 0.32, 1),
+          curve: const Cubic(0.175, 0.885, 0.32, 1),
         )),
         weight: 40,
       ),
     ]).animate(controller);
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () => controller.forward());
     }
   }
@@ -135,20 +135,18 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        return Transform.scale(
-          scale: scale.value,
-          child: Transform.translate(
-            offset: Offset(0, offset.value),
-            child: Opacity(
-              opacity: opacity.value,
-              child: child,
-            ),
-          ),
-        );
-      },
       child: child,
+      animation: controller,
+      builder: (context, child) => Transform.scale(
+        scale: scale.value,
+        child: Transform.translate(
+          offset: Offset(0, offset.value),
+          child: Opacity(
+            opacity: opacity.value,
+            child: child,
+          ),
+        ),
+      ),
     );
   }
 }

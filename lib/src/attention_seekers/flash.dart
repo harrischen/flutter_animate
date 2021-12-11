@@ -52,7 +52,7 @@ class _FlashState extends State<Flash> with SingleTickerProviderStateMixin {
       TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.0), weight: 25.0),
     ]).animate(controller);
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () => controller.forward());
     }
   }
@@ -91,8 +91,8 @@ class _GrowTransition extends StatelessWidget {
       child: child,
       animation: controller,
       builder: (context, child) => Opacity(
-        opacity: opacity.value,
         child: child,
+        opacity: opacity.value,
       ),
     );
   }

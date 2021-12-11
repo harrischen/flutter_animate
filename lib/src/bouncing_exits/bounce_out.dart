@@ -26,10 +26,10 @@ class BounceOut extends StatefulWidget {
   final AnimationController? controller;
 
   @override
-  BbounceOutState createState() => BbounceOutState();
+  BounceOutState createState() => BounceOutState();
 }
 
-class BbounceOutState extends State<BounceOut>
+class BounceOutState extends State<BounceOut>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> scale;
@@ -69,7 +69,7 @@ class BbounceOutState extends State<BounceOut>
       ),
     );
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () => controller.forward());
     }
   }

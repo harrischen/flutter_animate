@@ -67,7 +67,7 @@ class _ShakeXState extends State<RubberBand>
       TweenSequenceItem(tween: Tween(begin: 0.95, end: 1.0), weight: 25.0),
     ]).animate(CurvedAnimation(parent: controller, curve: widget.curve));
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () {
         controller.forward();
         if (widget.repeat) {
@@ -114,9 +114,9 @@ class _GrowTransition extends StatelessWidget {
       child: child,
       animation: controller,
       builder: (context, child) => Transform(
+        child: child,
         alignment: Alignment.center,
         transform: Matrix4.diagonal3Values(scaleX.value, scaleY.value, 1.0),
-        child: child,
       ),
     );
   }

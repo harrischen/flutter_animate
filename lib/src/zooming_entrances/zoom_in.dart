@@ -51,7 +51,7 @@ class _ZoomInState extends State<ZoomIn> with SingleTickerProviderStateMixin {
     scale = Tween<double>(begin: 0.3, end: 1.0).animate(curve);
     opacity = Tween<double>(begin: 0.0, end: 1.0).animate(curve);
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () => controller.forward());
     }
   }
@@ -90,17 +90,15 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: scale,
-      builder: (context, child) {
-        return Transform.scale(
-          scale: scale.value,
-          child: Opacity(
-            opacity: opacity.value,
-            child: child,
-          ),
-        );
-      },
       child: child,
+      animation: scale,
+      builder: (context, child) => Transform.scale(
+        scale: scale.value,
+        child: Opacity(
+          opacity: opacity.value,
+          child: child,
+        ),
+      ),
     );
   }
 }

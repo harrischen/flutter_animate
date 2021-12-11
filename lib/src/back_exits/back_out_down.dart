@@ -87,7 +87,7 @@ class _BackOutDownState extends State<BackOutDown>
       ),
     ]).animate(controller);
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () => controller.forward());
     }
   }
@@ -129,21 +129,19 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: scale,
-      builder: (context, child) {
-        final _scale =
-            Matrix4.diagonal3Values(scale.value, scale.value, scale.value);
-        final _offset = Matrix4.translationValues(0.0, translateY.value, 0.0);
-        return Transform(
-          alignment: Alignment.center,
-          transform: _scale..add(_offset),
-          child: Opacity(
-            opacity: opacity.value,
-            child: child,
-          ),
-        );
-      },
       child: child,
+      animation: scale,
+      builder: (context, child) => Transform.translate(
+        offset: Offset(0.0, translateY.value),
+        child: Transform.scale(
+          alignment: FractionalOffset.center,
+          scale: scale.value,
+          child: Opacity(
+            child: child,
+            opacity: opacity.value,
+          ),
+        ),
+      ),
     );
   }
 }

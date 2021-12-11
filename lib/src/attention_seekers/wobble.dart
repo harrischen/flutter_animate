@@ -65,7 +65,7 @@ class _ShakeXState extends State<Wobble> with SingleTickerProviderStateMixin {
       TweenSequenceItem(tween: Tween(begin: -5.0, end: 0.0), weight: 25.0),
     ]).animate(CurvedAnimation(parent: controller, curve: widget.curve));
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () {
         controller.forward();
       });
@@ -112,8 +112,8 @@ class _GrowTransition extends StatelessWidget {
         alignment: FractionalOffset.center,
         angle: rotateZ.value * pi / 180,
         child: FractionalTranslation(
-          translation: Offset(offset.value / 100, 0),
           child: child,
+          translation: Offset(offset.value / 100, 0),
         ),
       ),
     );

@@ -64,7 +64,7 @@ class _LightSpeedOutRightState extends State<LightSpeedOutRight>
       curve: widget.curve,
     ));
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () => controller.forward());
     }
   }
@@ -106,21 +106,19 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        return Transform(
-          alignment: FractionalOffset.center,
-          transform: Matrix4.skewX(skew.value * pi / 180),
-          child: FractionalTranslation(
-            translation: Offset(translate.value, 0.0),
-            child: Opacity(
-              opacity: opacity.value,
-              child: child,
-            ),
-          ),
-        );
-      },
       child: child,
+      animation: controller,
+      builder: (context, child) => Transform(
+        alignment: FractionalOffset.center,
+        transform: Matrix4.skewX(skew.value * pi / 180),
+        child: FractionalTranslation(
+          translation: Offset(translate.value, 0.0),
+          child: Opacity(
+            opacity: opacity.value,
+            child: child,
+          ),
+        ),
+      ),
     );
   }
 }

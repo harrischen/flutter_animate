@@ -87,7 +87,7 @@ export 'src/zooming_entrances/zoom_in_left.dart';
 export 'src/zooming_entrances/zoom_in_right.dart';
 export 'src/zooming_entrances/zoom_in_up.dart';
 export 'src/zooming_exits/zoom_out.dart';
-export 'src/zooming_exits/zzoom_out_down.dart';
+export 'src/zooming_exits/zoom_out_down.dart';
 export 'src/zooming_exits/zoom_out_left.dart';
 export 'src/zooming_exits/zoom_out_right.dart';
 export 'src/zooming_exits/zoom_out_up.dart';

@@ -75,7 +75,7 @@ class _JackInTheBoxState extends State<JackInTheBox>
       ),
     );
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () {
         controller.forward();
       });
@@ -119,19 +119,19 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
+      child: child,
       animation: controller,
       builder: (context, child) {
-        final _roate = rotate.value * pi / 180;
+        final _rotate = rotate.value * pi / 180;
         return Transform(
           alignment: FractionalOffset.bottomCenter,
-          transform: Matrix4.rotationZ(_roate)..scale(scale.value),
+          transform: Matrix4.rotationZ(_rotate)..scale(scale.value),
           child: Opacity(
             opacity: opacity.value,
             child: child,
           ),
         );
       },
-      child: child,
     );
   }
 }

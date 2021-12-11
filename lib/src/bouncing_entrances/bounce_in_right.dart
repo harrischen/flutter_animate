@@ -26,10 +26,10 @@ class BounceInRight extends StatefulWidget {
   final AnimationController? controller;
 
   @override
-  BbounceInRightState createState() => BbounceInRightState();
+  BounceInRightState createState() => BounceInRightState();
 }
 
-class BbounceInRightState extends State<BounceInRight>
+class BounceInRightState extends State<BounceInRight>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> scale;
@@ -77,7 +77,7 @@ class BbounceInRightState extends State<BounceInRight>
       curve: Interval(0, 0.60),
     ));
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () => controller.forward());
     }
   }
@@ -119,6 +119,7 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
+      child: child,
       animation: controller,
       builder: (context, child) {
         final _scale = Matrix4.diagonal3Values(scale.value, 1.0, 1.0);
@@ -132,7 +133,6 @@ class _GrowTransition extends StatelessWidget {
           ),
         );
       },
-      child: child,
     );
   }
 }

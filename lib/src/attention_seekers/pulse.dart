@@ -52,7 +52,7 @@ class _PulseState extends State<Pulse> with SingleTickerProviderStateMixin {
       TweenSequenceItem(tween: Tween(begin: 1.15, end: 1.0), weight: 50.0),
     ]).animate(CurvedAnimation(parent: controller, curve: widget.curve));
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () {
         controller.forward();
         if (widget.repeat) {
@@ -96,8 +96,8 @@ class _GrowTransition extends StatelessWidget {
       child: child,
       animation: controller,
       builder: (context, child) => Transform.scale(
-        scale: scale.value,
         child: child,
+        scale: scale.value,
       ),
     );
   }

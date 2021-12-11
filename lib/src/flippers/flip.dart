@@ -117,7 +117,7 @@ class _FlipState extends State<Flip> with SingleTickerProviderStateMixin {
       ),
     ]).animate(controller);
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () => controller.forward());
     }
   }
@@ -159,19 +159,17 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        return Transform(
-          alignment: FractionalOffset.center,
-          transform: Matrix4.identity()
-            ..setEntry(3, 2, -0.004)
-            ..scale(scale.value)
-            ..translate(0.0, 0.0, translate.value)
-            ..rotateY(rotate.value * pi / 180),
-          child: child,
-        );
-      },
       child: child,
+      animation: controller,
+      builder: (context, child) => Transform(
+        alignment: FractionalOffset.center,
+        transform: Matrix4.identity()
+          ..setEntry(3, 2, -0.004)
+          ..scale(scale.value)
+          ..translate(0.0, 0.0, translate.value)
+          ..rotateY(rotate.value * pi / 180),
+        child: child,
+      ),
     );
   }
 }

@@ -90,7 +90,7 @@ class _HingeState extends State<Hinge> with SingleTickerProviderStateMixin {
       ),
     );
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () => controller.forward());
     }
   }
@@ -132,21 +132,19 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        return Transform.translate(
-          offset: Offset(0.0, translate.value),
-          child: Transform.rotate(
-            alignment: FractionalOffset.topLeft,
-            angle: rotate.value * pi / 180,
-            child: Opacity(
-              opacity: opacity.value,
-              child: child,
-            ),
-          ),
-        );
-      },
       child: child,
+      animation: controller,
+      builder: (context, child) => Transform.translate(
+        offset: Offset(0.0, translate.value),
+        child: Transform.rotate(
+          alignment: FractionalOffset.topLeft,
+          angle: rotate.value * pi / 180,
+          child: Opacity(
+            opacity: opacity.value,
+            child: child,
+          ),
+        ),
+      ),
     );
   }
 }

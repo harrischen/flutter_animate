@@ -81,7 +81,7 @@ class _JelloState extends State<Jello> with SingleTickerProviderStateMixin {
       ),
     ]).animate(CurvedAnimation(parent: controller, curve: widget.curve));
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () => controller.forward());
     }
   }
@@ -120,9 +120,9 @@ class _GrowTransition extends StatelessWidget {
       child: child,
       animation: controller,
       builder: (context, child) => Transform(
+        child: child,
         alignment: FractionalOffset.center,
         transform: Matrix4.skew(skew.value * pi / 180, skew.value * pi / 180),
-        child: child,
       ),
     );
   }

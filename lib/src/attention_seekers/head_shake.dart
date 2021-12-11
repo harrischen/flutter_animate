@@ -66,7 +66,7 @@ class _HeadShakeState extends State<HeadShake>
       TweenSequenceItem(tween: ConstantTween(0.0), weight: 50.0),
     ]).animate(CurvedAnimation(parent: controller, curve: widget.curve));
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () => controller.forward());
     }
   }
@@ -110,9 +110,9 @@ class _GrowTransition extends StatelessWidget {
       builder: (context, child) => Transform.translate(
         offset: Offset(translateX.value, 0.0),
         child: Transform(
+          child: child,
           alignment: FractionalOffset.center,
           transform: Matrix4.rotationY(rotateY.value * pi / 180),
-          child: child,
         ),
       ),
     );

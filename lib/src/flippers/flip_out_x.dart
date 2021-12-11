@@ -51,17 +51,14 @@ class _FlipOutXState extends State<FlipOutX>
     rotate = TweenSequence([
       TweenSequenceItem(tween: Tween(begin: 0.0, end: -20.0), weight: 30),
       TweenSequenceItem(tween: Tween(begin: -20.0, end: 90.0), weight: 70),
-    ]).animate(CurvedAnimation(
-      parent: controller,
-      curve: widget.curve,
-    ));
+    ]).animate(CurvedAnimation(parent: controller, curve: widget.curve));
 
     opacity = Tween(begin: 1.0, end: 0.0).animate(CurvedAnimation(
       parent: controller,
       curve: Interval(0.3, 1.0, curve: widget.curve),
     ));
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () => controller.forward());
     }
   }
@@ -100,20 +97,18 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        return Transform(
-          alignment: FractionalOffset.center,
-          transform: Matrix4.identity()
-            ..setEntry(3, 2, -0.004)
-            ..rotateX(rotate.value * pi / 180),
-          child: Opacity(
-            opacity: opacity.value,
-            child: child,
-          ),
-        );
-      },
       child: child,
+      animation: controller,
+      builder: (context, child) => Transform(
+        alignment: FractionalOffset.center,
+        transform: Matrix4.identity()
+          ..setEntry(3, 2, -0.004)
+          ..rotateX(rotate.value * pi / 180),
+        child: Opacity(
+          opacity: opacity.value,
+          child: child,
+        ),
+      ),
     );
   }
 }

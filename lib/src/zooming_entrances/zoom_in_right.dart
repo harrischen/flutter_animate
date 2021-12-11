@@ -93,7 +93,7 @@ class _ZoomInRightState extends State<ZoomInRight>
       ),
     ]).animate(controller);
 
-    if (!(widget.controller is AnimationController)) {
+    if (widget.controller is! AnimationController) {
       Future.delayed(widget.delay, () => controller.forward());
     }
   }
@@ -135,20 +135,18 @@ class _GrowTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        return Transform.scale(
-          scale: scale.value,
-          child: Transform.translate(
-            offset: Offset(offset.value, 0),
-            child: Opacity(
-              opacity: opacity.value,
-              child: child,
-            ),
-          ),
-        );
-      },
       child: child,
+      animation: controller,
+      builder: (context, child) => Transform.scale(
+        scale: scale.value,
+        child: Transform.translate(
+          offset: Offset(offset.value, 0),
+          child: Opacity(
+            opacity: opacity.value,
+            child: child,
+          ),
+        ),
+      ),
     );
   }
 }
