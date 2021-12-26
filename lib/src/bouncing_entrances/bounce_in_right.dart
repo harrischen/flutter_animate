@@ -74,7 +74,7 @@ class BounceInRightState extends State<BounceInRight>
 
     opacity = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: controller,
-      curve: Interval(0, 0.60),
+      curve: const Interval(0, 0.60),
     ));
 
     if (widget.controller is! AnimationController) {

@@ -51,13 +51,13 @@ class _ZoomInLeftState extends State<ZoomInLeft>
     opacity = TweenSequence<double>(<TweenSequenceItem<double>>[
       TweenSequenceItem(
         tween: Tween<double>(begin: 0.0, end: 1.0).chain(CurveTween(
-          curve: Cubic(0.55, 0.055, 0.675, 0.19),
+          curve: const Cubic(0.55, 0.055, 0.675, 0.19),
         )),
         weight: 60,
       ),
       TweenSequenceItem(
         tween: Tween<double>(begin: 1.0, end: 1.0).chain(CurveTween(
-          curve: Cubic(0.175, 0.885, 0.32, 1),
+          curve: const Cubic(0.175, 0.885, 0.32, 1),
         )),
         weight: 40,
       ),
@@ -66,13 +66,13 @@ class _ZoomInLeftState extends State<ZoomInLeft>
     scale = TweenSequence<double>(<TweenSequenceItem<double>>[
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: 0.1, end: 0.475).chain(CurveTween(
-          curve: Cubic(0.55, 0.055, 0.675, 0.19),
+          curve: const Cubic(0.55, 0.055, 0.675, 0.19),
         )),
         weight: 60,
       ),
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: 0.475, end: 1.0).chain(CurveTween(
-          curve: Cubic(0.175, 0.885, 0.32, 1),
+          curve: const Cubic(0.175, 0.885, 0.32, 1),
         )),
         weight: 40,
       ),
@@ -81,13 +81,13 @@ class _ZoomInLeftState extends State<ZoomInLeft>
     offset = TweenSequence<double>(<TweenSequenceItem<double>>[
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: -1000, end: 10).chain(CurveTween(
-          curve: Cubic(0.55, 0.055, 0.675, 0.19),
+          curve: const Cubic(0.55, 0.055, 0.675, 0.19),
         )),
         weight: 60,
       ),
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: 10, end: 0).chain(CurveTween(
-          curve: Cubic(0.175, 0.885, 0.32, 1),
+          curve: const Cubic(0.175, 0.885, 0.32, 1),
         )),
         weight: 40,
       ),
