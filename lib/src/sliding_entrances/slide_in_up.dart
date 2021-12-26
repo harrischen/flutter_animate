@@ -14,14 +14,22 @@ class SlideInUp extends StatefulWidget {
     this.duration = const Duration(milliseconds: 1000),
     this.delay = const Duration(milliseconds: 0),
     this.curve = Curves.ease,
+    this.begin = 1.0,
+    this.end = 0.0,
     this.completed,
     this.controller,
-  }) : super(key: key);
+  })  : assert(duration >= const Duration(milliseconds: 100)),
+        assert(delay >= const Duration(milliseconds: 0)),
+        assert(begin >= 0.0, 'Must be greater than or equal to 0.0'),
+        assert(end <= 0.0, 'Must be less than or equal to 0.0'),
+        super(key: key);
 
   final Widget child;
   final Duration duration;
   final Duration delay;
   final Curve curve;
+  final double begin;
+  final double end;
   final VoidCallback? completed;
   final AnimationController? controller;
 
